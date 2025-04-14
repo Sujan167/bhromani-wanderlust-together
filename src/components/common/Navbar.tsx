@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -12,18 +12,51 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Menu, Bell, MapPin, MapPinOff, LogOut, User, Users, Calendar, Map } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
+
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  isAuthenticated: boolean;
+}
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const navigate = useNavigate();
   
-  // Mock login function for demonstration
+  useEffect(() => {
+    // Check if user is logged in on component mount
+    const storedUser = localStorage.getItem('bhromani_user');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser.isAuthenticated) {
+          setIsLoggedIn(true);
+          setUserData(parsedUser);
+        }
+      } catch (e) {
+        console.error("Error parsing user data from localStorage", e);
+      }
+    }
+  }, []);
+  
+  // Handle login (for demo purposes - normally would redirect to login page)
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    navigate('/login');
   };
   
-  // Mock logout function for demonstration
+  // Handle logout
   const handleLogout = () => {
+    localStorage.removeItem('bhromani_user');
     setIsLoggedIn(false);
+    setUserData(null);
+    toast({
+      title: "Logged out successfully",
+      description: "You have been logged out from your account.",
+    });
+    navigate('/');
   };
 
   return (
@@ -60,8 +93,10 @@ const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="h-9 w-9 cursor-pointer">
-                    <AvatarImage src="/placeholder.svg" alt="User" />
-                    <AvatarFallback className="bg-bhromani-purple text-white">NN</AvatarFallback>
+                    <AvatarImage src="/placeholder.svg" alt={userData?.name || "User"} />
+                    <AvatarFallback className="bg-bhromani-purple text-white">
+                      {userData?.name?.substring(0, 2)?.toUpperCase() || "NN"}
+                    </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">

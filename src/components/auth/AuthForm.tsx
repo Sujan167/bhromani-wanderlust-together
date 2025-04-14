@@ -1,20 +1,48 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail, Lock, User as UserIcon, Phone } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 type AuthMode = "login" | "signup";
 
 const AuthForm = () => {
   const [mode, setMode] = useState<AuthMode>("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", mode);
-    // This would connect to authentication backend in a real app
+    setLoading(true);
+    
+    // Simple mock authentication
+    setTimeout(() => {
+      // Store user data in localStorage to simulate authentication
+      const userData = {
+        id: "user-" + Date.now(),
+        email,
+        name: name || email.split('@')[0],
+        isAuthenticated: true
+      };
+      
+      localStorage.setItem('bhromani_user', JSON.stringify(userData));
+      
+      toast({
+        title: mode === "login" ? "Welcome back!" : "Account created successfully!",
+        description: "You're now logged in.",
+      });
+      
+      setLoading(false);
+      navigate('/dashboard');
+    }, 1000);
   };
 
   return (
@@ -42,7 +70,15 @@ const AuthForm = () => {
               <Label htmlFor="email">Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input id="email" type="email" placeholder="you@example.com" className="pl-10" required />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="you@example.com" 
+                  className="pl-10" 
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} 
+                />
               </div>
             </div>
             
@@ -55,12 +91,24 @@ const AuthForm = () => {
               </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input id="password" type="password" placeholder="••••••••" className="pl-10" required />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  className="pl-10" 
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
             </div>
             
-            <Button type="submit" className="w-full bg-bhromani-purple hover:bg-bhromani-purple-dark">
-              Login
+            <Button 
+              type="submit" 
+              className="w-full bg-bhromani-purple hover:bg-bhromani-purple-dark"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
         </TabsContent>
@@ -71,7 +119,15 @@ const AuthForm = () => {
               <Label htmlFor="name">Full Name</Label>
               <div className="relative">
                 <UserIcon className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input id="name" type="text" placeholder="John Doe" className="pl-10" required />
+                <Input 
+                  id="name" 
+                  type="text" 
+                  placeholder="John Doe" 
+                  className="pl-10" 
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </div>
             </div>
             
@@ -79,7 +135,15 @@ const AuthForm = () => {
               <Label htmlFor="signup-email">Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input id="signup-email" type="email" placeholder="you@example.com" className="pl-10" required />
+                <Input 
+                  id="signup-email" 
+                  type="email" 
+                  placeholder="you@example.com" 
+                  className="pl-10" 
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
             </div>
             
@@ -87,7 +151,14 @@ const AuthForm = () => {
               <Label htmlFor="phone">Phone Number (optional)</Label>
               <div className="relative">
                 <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input id="phone" type="tel" placeholder="+1 (555) 000-0000" className="pl-10" />
+                <Input 
+                  id="phone" 
+                  type="tel" 
+                  placeholder="+1 (555) 000-0000" 
+                  className="pl-10"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
               </div>
             </div>
             
@@ -95,12 +166,24 @@ const AuthForm = () => {
               <Label htmlFor="signup-password">Password</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input id="signup-password" type="password" placeholder="••••••••" className="pl-10" required />
+                <Input 
+                  id="signup-password" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  className="pl-10" 
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
             </div>
             
-            <Button type="submit" className="w-full bg-bhromani-purple hover:bg-bhromani-purple-dark">
-              Create Account
+            <Button 
+              type="submit" 
+              className="w-full bg-bhromani-purple hover:bg-bhromani-purple-dark"
+              disabled={loading}
+            >
+              {loading ? "Creating Account..." : "Create Account"}
             </Button>
             
             <p className="text-xs text-center text-gray-500 mt-4">
