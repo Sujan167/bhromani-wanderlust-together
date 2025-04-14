@@ -10,6 +10,9 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
+// Get the base URL from your CNAME/domain
+const baseUrl = '/';
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -17,7 +20,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename={baseUrl}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />

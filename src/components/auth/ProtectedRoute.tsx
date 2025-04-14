@@ -13,14 +13,19 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   useEffect(() => {
     const checkAuth = () => {
       const userData = localStorage.getItem('bhromani_user');
+      console.log('Auth check - userData:', userData);
+      
       if (userData) {
         try {
           const user = JSON.parse(userData);
+          console.log('Parsed user:', user);
           setIsAuthenticated(user.isAuthenticated);
         } catch (e) {
+          console.error('Error parsing user data:', e);
           setIsAuthenticated(false);
         }
       } else {
+        console.log('No user data found');
         setIsAuthenticated(false);
       }
     };
@@ -34,10 +39,12 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   }
 
   if (!isAuthenticated) {
+    console.log('Not authenticated, redirecting to /login');
     // Redirect to login page but save the location they tried to access
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  console.log('Authentication successful, rendering children');
   return <>{children}</>;
 };
 
