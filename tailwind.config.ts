@@ -61,7 +61,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+        // Bhromani custom colors
+        bhromani: {
+          purple: '#9B87F5',
+          'purple-dark': '#7E69AB',
+          orange: '#F97316',
+          teal: '#2DD4BF',
+          'light-gray': '#F1F0FB',
+          'neutral-gray': '#8E9196',
+          'dark-purple': '#1A1F2C',
+          'soft-peach': '#FDE1D3',
+        }
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
