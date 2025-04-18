@@ -6,26 +6,31 @@ import { Database } from './database.types';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-// Check if supabaseUrl and supabaseAnonKey are available
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error(
-    'Supabase URL and/or Anon Key are missing. Make sure you have set the VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables.'
+// Check if supabase credentials are available
+const hasValidCredentials = !!supabaseUrl && !!supabaseAnonKey;
+
+// Log warning if credentials are missing
+if (!hasValidCredentials) {
+  console.warn(
+    'Supabase URL and/or Anon Key are missing. Using fallback authentication mode. Make sure you have set the VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables.'
   );
 }
 
-// Create a Supabase client with appropriate error handling
-export const supabase = createClient<Database>(
-  supabaseUrl,
-  supabaseAnonKey,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-    },
-  }
-);
+// Create a Supabase client only if we have valid credentials
+export const supabase = hasValidCredentials 
+  ? createClient<Database>(
+      supabaseUrl,
+      supabaseAnonKey,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+        },
+      }
+    )
+  : null as any; // Use null with type assertion for development without credentials
 
-// Export a helper function to check if Supabase is properly configured
+// Helper function to check if Supabase is properly configured
 export const isSupabaseConfigured = () => {
-  return !!supabaseUrl && !!supabaseAnonKey;
+  return hasValidCredentials;
 };
