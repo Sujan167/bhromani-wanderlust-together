@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Login from "./pages/auth/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
+import CreateTrip from "./pages/trips/CreateTrip";
+import CreateGroup from "./pages/groups/CreateGroup";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -42,6 +44,14 @@ const App = () => (
               </ProtectedRoute>
             } 
           />
+          <Route
+            path="/groups/create"
+            element={
+              <ProtectedRoute>
+                <CreateGroup />
+              </ProtectedRoute>
+            }
+          />
           <Route 
             path="/trips" 
             element={
@@ -49,6 +59,14 @@ const App = () => (
                 <Dashboard />
               </ProtectedRoute>
             } 
+          />
+          <Route
+            path="/trips/create"
+            element={
+              <ProtectedRoute>
+                <CreateTrip />
+              </ProtectedRoute>
+            }
           />
           <Route 
             path="/discover" 

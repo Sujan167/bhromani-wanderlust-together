@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail, Lock, User as UserIcon, Phone } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 type AuthMode = "login" | "signup";
 
@@ -19,30 +20,58 @@ const AuthForm = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    // Simple mock authentication
-    setTimeout(() => {
-      // Store user data in localStorage to simulate authentication
-      const userData = {
-        id: "user-" + Date.now(),
-        email,
-        name: name || email.split('@')[0],
-        isAuthenticated: true
-      };
-      
-      localStorage.setItem('bhromani_user', JSON.stringify(userData));
-      
+    try {
+      if (mode === "login") {
+        // Handle login
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        
+        if (error) throw error;
+        
+        toast({
+          title: "Welcome back!",
+          description: "You're now logged in.",
+        });
+        
+        navigate('/dashboard');
+      } else {
+        // Handle signup
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: name,
+              phone: phone,
+            },
+          },
+        });
+        
+        if (error) throw error;
+        
+        // If signUp is successful
+        toast({
+          title: "Account created successfully!",
+          description: "Please check your email for confirmation.",
+        });
+        
+        navigate('/dashboard');
+      }
+    } catch (error: any) {
       toast({
-        title: mode === "login" ? "Welcome back!" : "Account created successfully!",
-        description: "You're now logged in.",
+        title: "Error",
+        description: error.message || "Something went wrong",
+        variant: "destructive",
       });
-      
+    } finally {
       setLoading(false);
-      navigate('/dashboard');
-    }, 1000);
+    }
   };
 
   return (

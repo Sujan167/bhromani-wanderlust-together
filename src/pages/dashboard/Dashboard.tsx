@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/common/Navbar";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,6 +11,7 @@ import LocationMap from "@/components/map/LocationMap";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("trips");
+  const navigate = useNavigate();
   
   // Mock data for groups
   const groups = [
@@ -54,6 +56,16 @@ const Dashboard = () => {
     },
   ];
 
+  // Navigate to create trip page
+  const handleCreateTrip = () => {
+    navigate("/trips/create");
+  };
+
+  // Navigate to create group page
+  const handleCreateGroup = () => {
+    navigate("/groups/create");
+  };
+
   return (
     <div className="min-h-screen bg-bhromani-light-gray">
       <Navbar />
@@ -65,11 +77,18 @@ const Dashboard = () => {
             <p className="text-gray-600">Here's what's happening with your trips and groups</p>
           </div>
           <div className="flex space-x-3">
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={handleCreateTrip}
+            >
               <Plus className="h-4 w-4" />
               <span>New Trip</span>
             </Button>
-            <Button className="flex items-center gap-2 bg-bhromani-purple hover:bg-bhromani-purple-dark">
+            <Button 
+              className="flex items-center gap-2 bg-bhromani-purple hover:bg-bhromani-purple-dark"
+              onClick={handleCreateGroup}
+            >
               <Plus className="h-4 w-4" />
               <span>New Group</span>
             </Button>
@@ -135,7 +154,10 @@ const Dashboard = () => {
               </Card>
               
               {/* Create New Trip Card */}
-              <Card className="border-dashed flex flex-col items-center justify-center p-6 h-full">
+              <Card 
+                className="border-dashed flex flex-col items-center justify-center p-6 h-full cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={handleCreateTrip}
+              >
                 <div className="w-16 h-16 rounded-full bg-bhromani-light-gray flex items-center justify-center mb-4">
                   <Plus className="h-8 w-8 text-bhromani-purple" />
                 </div>
@@ -157,7 +179,10 @@ const Dashboard = () => {
               ))}
               
               {/* Create New Group Card */}
-              <Card className="border-dashed flex flex-col items-center justify-center p-6 h-full">
+              <Card 
+                className="border-dashed flex flex-col items-center justify-center p-6 h-full cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={handleCreateGroup}
+              >
                 <div className="w-16 h-16 rounded-full bg-bhromani-light-gray flex items-center justify-center mb-4">
                   <Users className="h-8 w-8 text-bhromani-purple" />
                 </div>

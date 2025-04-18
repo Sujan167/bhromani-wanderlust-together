@@ -13,33 +13,55 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Menu, Bell, MapPin, MapPinOff, LogOut, User, Users, Calendar, Map } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Session } from "@supabase/supabase-js";
 
 interface UserData {
   id: string;
   name: string;
   email: string;
-  isAuthenticated: boolean;
 }
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Check if user is logged in on component mount
-    const storedUser = localStorage.getItem('bhromani_user');
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        if (parsedUser.isAuthenticated) {
-          setIsLoggedIn(true);
-          setUserData(parsedUser);
+    // Set up auth state change listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+        setIsLoggedIn(!!session);
+        if (session?.user) {
+          setUserData({
+            id: session.user.id,
+            name: session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
+            email: session.user.email || '',
+          });
+        } else {
+          setUserData(null);
         }
-      } catch (e) {
-        console.error("Error parsing user data from localStorage", e);
       }
-    }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setIsLoggedIn(!!session);
+      if (session?.user) {
+        setUserData({
+          id: session.user.id,
+          name: session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
+          email: session.user.email || '',
+        });
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
   
   // Handle login (for demo purposes - normally would redirect to login page)
@@ -48,15 +70,21 @@ const Navbar = () => {
   };
   
   // Handle logout
-  const handleLogout = () => {
-    localStorage.removeItem('bhromani_user');
-    setIsLoggedIn(false);
-    setUserData(null);
-    toast({
-      title: "Logged out successfully",
-      description: "You have been logged out from your account.",
-    });
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast({
+        title: "Logged out successfully",
+        description: "You have been logged out from your account.",
+      });
+      navigate('/');
+    } catch (error: any) {
+      toast({
+        title: "Error logging out",
+        description: error.message || "Something went wrong",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

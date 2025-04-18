@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 
 interface ProtectedRouteProps {
@@ -14,31 +14,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const location = useLocation();
 
   useEffect(() => {
-    // If Supabase is not configured, we'll use localStorage as a fallback
-    if (!isSupabaseConfigured()) {
-      console.warn('Supabase not configured. Using localStorage authentication fallback.');
-      
-      const checkLocalAuth = () => {
-        const userData = localStorage.getItem('bhromani_user');
-        if (userData) {
-          try {
-            const user = JSON.parse(userData);
-            setIsAuthenticated(user.isAuthenticated);
-          } catch (e) {
-            console.error('Error parsing user data:', e);
-            setIsAuthenticated(false);
-          }
-        } else {
-          setIsAuthenticated(false);
-        }
-        setIsLoading(false);
-      };
-      
-      checkLocalAuth();
-      return;
-    }
-
-    // If Supabase is configured, use it for authentication
+    // Check if the user is authenticated
     const checkAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -60,20 +36,14 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     checkAuth();
 
     // Set up auth state change listener
-    let subscription: { unsubscribe: () => void } | null = null;
-    
-    try {
-      const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-        console.log('Auth state change - session:', session);
-        setIsAuthenticated(!!session);
-      });
-      subscription = data.subscription;
-    } catch (error) {
-      console.error('Error setting up auth state listener:', error);
-    }
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('Auth state change - session:', session);
+      setIsAuthenticated(!!session);
+      setIsLoading(false);
+    });
 
     return () => {
-      if (subscription) subscription.unsubscribe();
+      subscription.unsubscribe();
     };
   }, []);
 
