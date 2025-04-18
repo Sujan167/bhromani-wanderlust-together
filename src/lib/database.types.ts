@@ -35,6 +35,7 @@ export interface Database {
           id: string
           name: string
           description: string | null
+          cover_image: string | null
           created_at: string
           created_by: string
         }
@@ -42,6 +43,7 @@ export interface Database {
           id?: string
           name: string
           description?: string | null
+          cover_image?: string | null
           created_at?: string
           created_by: string
         }
@@ -49,11 +51,82 @@ export interface Database {
           id?: string
           name?: string
           description?: string | null
+          cover_image?: string | null
+          created_at?: string
+          created_by?: string
+        }
+      }
+      group_members: {
+        Row: {
+          id: string
+          group_id: string
+          user_id: string
+          role: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          group_id: string
+          user_id: string
+          role: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          group_id?: string
+          user_id?: string
+          role?: string
+          created_at?: string
+        }
+      }
+      trips: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          location: string
+          start_date: string
+          end_date: string
+          cover_image: string | null
+          created_at: string
+          created_by: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          location: string
+          start_date: string
+          end_date: string
+          cover_image?: string | null
+          created_at?: string
+          created_by: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          location?: string
+          start_date?: string
+          end_date?: string
+          cover_image?: string | null
           created_at?: string
           created_by?: string
         }
       }
       // Add more table types as needed
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
     }
   }
 }

@@ -52,7 +52,7 @@ const CreateGroup = () => {
       }
 
       // Insert the group into the database
-      const { data: group, error } = await supabase
+      const { data: groupData, error } = await supabase
         .from("groups")
         .insert({
           name: data.name,
@@ -66,15 +66,17 @@ const CreateGroup = () => {
       if (error) throw error;
 
       // Create a group membership for the creator
-      const { error: membershipError } = await supabase
-        .from("group_members")
-        .insert({
-          group_id: group.id,
-          user_id: user.id,
-          role: 'organizer',
-        });
+      if (groupData) {
+        const { error: membershipError } = await supabase
+          .from("group_members")
+          .insert({
+            group_id: groupData.id,
+            user_id: user.id,
+            role: 'organizer',
+          });
 
-      if (membershipError) throw membershipError;
+        if (membershipError) throw membershipError;
+      }
 
       toast({
         title: "Group created!",

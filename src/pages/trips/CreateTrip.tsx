@@ -63,7 +63,7 @@ const CreateTrip = () => {
       }
 
       // Insert the trip into the database
-      const { data: trip, error } = await supabase
+      const { data: tripData, error } = await supabase
         .from("trips")
         .insert({
           name: data.name,
