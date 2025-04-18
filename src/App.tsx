@@ -14,6 +14,9 @@ import Places from "./pages/profile/Places";
 import History from "./pages/profile/History";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import GroupsPage from "./pages/groups/GroupsPage";
+import TripsPage from "./pages/trips/TripsPage";
+import GroupChat from "./pages/groups/GroupChat";
 
 // Get the base URL from your CNAME/domain
 const baseUrl = '/';
@@ -43,7 +46,7 @@ const App = () => (
             path="/groups" 
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <GroupsPage />
               </ProtectedRoute>
             } 
           />
@@ -55,11 +58,19 @@ const App = () => (
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/groups/:groupId/chat"
+            element={
+              <ProtectedRoute>
+                <GroupChat />
+              </ProtectedRoute>
+            }
+          />
           <Route 
             path="/trips" 
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <TripsPage />
               </ProtectedRoute>
             } 
           />

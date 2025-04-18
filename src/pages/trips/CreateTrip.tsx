@@ -62,6 +62,16 @@ const CreateTrip = () => {
         throw new Error("User not authenticated");
       }
 
+      console.log("Creating trip with data:", {
+        name: data.name,
+        description: data.description || "",
+        location: data.location,
+        start_date: data.startDate.toISOString(),
+        end_date: data.endDate.toISOString(),
+        cover_image: data.coverImage || null,
+        created_by: user.id,
+      });
+
       // Insert the trip into the database
       const { data: tripData, error } = await supabase
         .from("trips")
@@ -77,14 +87,17 @@ const CreateTrip = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error:", error);
+        throw error;
+      }
 
       toast({
         title: "Trip created!",
         description: "Your new trip has been created successfully.",
       });
 
-      // Redirect to the trip details or trips list
+      // Redirect to the trips list
       navigate("/trips");
     } catch (error: any) {
       console.error("Error creating trip:", error);

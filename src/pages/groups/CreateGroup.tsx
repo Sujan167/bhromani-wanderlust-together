@@ -51,6 +51,13 @@ const CreateGroup = () => {
         throw new Error("User not authenticated");
       }
 
+      console.log("Creating group with data:", {
+        name: data.name,
+        description: data.description || "",
+        cover_image: data.coverImage || null,
+        created_by: user.id,
+      });
+
       // Insert the group into the database
       const { data: groupData, error } = await supabase
         .from("groups")
@@ -63,7 +70,10 @@ const CreateGroup = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error:", error);
+        throw error;
+      }
 
       // Create a group membership for the creator
       if (groupData) {
@@ -75,7 +85,10 @@ const CreateGroup = () => {
             role: 'organizer',
           });
 
-        if (membershipError) throw membershipError;
+        if (membershipError) {
+          console.error("Membership error:", membershipError);
+          throw membershipError;
+        }
       }
 
       toast({

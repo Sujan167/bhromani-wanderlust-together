@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -27,7 +27,9 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   
   useEffect(() => {
     // Set up auth state change listener
@@ -104,6 +106,11 @@ const Navbar = () => {
     }
   };
 
+  // Check if a nav item is active
+  const isActive = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 px-4 py-3">
       <div className="container mx-auto flex items-center justify-between">
@@ -114,13 +121,34 @@ const Navbar = () => {
           
           {isLoggedIn && (
             <div className="hidden md:flex items-center space-x-6">
-              <Link to="/trips" className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-bhromani-purple">
+              <Link 
+                to="/trips" 
+                className={`flex items-center gap-1 text-sm font-medium ${
+                  isActive('/trips') 
+                    ? 'text-bhromani-purple' 
+                    : 'text-gray-600 hover:text-bhromani-purple'
+                }`}
+              >
                 <Map size={18} /> Trips
               </Link>
-              <Link to="/groups" className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-bhromani-purple">
+              <Link 
+                to="/groups" 
+                className={`flex items-center gap-1 text-sm font-medium ${
+                  isActive('/groups') 
+                    ? 'text-bhromani-purple' 
+                    : 'text-gray-600 hover:text-bhromani-purple'
+                }`}
+              >
                 <Users size={18} /> Groups
               </Link>
-              <Link to="/discover" className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-bhromani-purple">
+              <Link 
+                to="/discover" 
+                className={`flex items-center gap-1 text-sm font-medium ${
+                  isActive('/discover') 
+                    ? 'text-bhromani-purple' 
+                    : 'text-gray-600 hover:text-bhromani-purple'
+                }`}
+              >
                 <MapPin size={18} /> Discover
               </Link>
             </div>
@@ -166,6 +194,16 @@ const Navbar = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              
+              {/* Mobile menu button */}
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="md:hidden"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                <Menu size={20} />
+              </Button>
             </>
           ) : (
             <>
@@ -179,6 +217,47 @@ const Navbar = () => {
           )}
         </div>
       </div>
+      
+      {/* Mobile Navigation Menu */}
+      {mobileMenuOpen && isLoggedIn && (
+        <div className="md:hidden py-3 px-4 mt-2 bg-white border-t">
+          <div className="flex flex-col space-y-3">
+            <Link 
+              to="/trips" 
+              className={`flex items-center gap-2 py-2 px-4 rounded-md ${
+                isActive('/trips') 
+                  ? 'bg-bhromani-purple/10 text-bhromani-purple' 
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <Map size={18} /> Trips
+            </Link>
+            <Link 
+              to="/groups" 
+              className={`flex items-center gap-2 py-2 px-4 rounded-md ${
+                isActive('/groups') 
+                  ? 'bg-bhromani-purple/10 text-bhromani-purple' 
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <Users size={18} /> Groups
+            </Link>
+            <Link 
+              to="/discover" 
+              className={`flex items-center gap-2 py-2 px-4 rounded-md ${
+                isActive('/discover') 
+                  ? 'bg-bhromani-purple/10 text-bhromani-purple' 
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <MapPin size={18} /> Discover
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
