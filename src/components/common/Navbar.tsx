@@ -20,6 +20,7 @@ interface UserData {
   id: string;
   name: string;
   email: string;
+  avatar_url?: string | null;
 }
 
 const Navbar = () => {
@@ -31,14 +32,22 @@ const Navbar = () => {
   useEffect(() => {
     // Set up auth state change listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      async (_event, session) => {
         setSession(session);
         setIsLoggedIn(!!session);
         if (session?.user) {
+          // Get user profile data if available
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('full_name, avatar_url')
+            .eq('id', session.user.id)
+            .single();
+            
           setUserData({
             id: session.user.id,
-            name: session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
+            name: profileData?.full_name || session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
             email: session.user.email || '',
+            avatar_url: profileData?.avatar_url || null
           });
         } else {
           setUserData(null);
@@ -47,14 +56,22 @@ const Navbar = () => {
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setIsLoggedIn(!!session);
       if (session?.user) {
+        // Get user profile data if available
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('full_name, avatar_url')
+          .eq('id', session.user.id)
+          .single();
+          
         setUserData({
           id: session.user.id,
-          name: session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
+          name: profileData?.full_name || session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
           email: session.user.email || '',
+          avatar_url: profileData?.avatar_url || null
         });
       }
     });
@@ -92,7 +109,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <Link to="/" className="flex items-center">
-            <span className="text-xl font-bold text-bhromani-purple">Bhromani</span>
+            <span className="text-xl font-bold text-bhromani-purple">TrailMesh</span>
           </Link>
           
           {isLoggedIn && (
@@ -121,24 +138,24 @@ const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="h-9 w-9 cursor-pointer">
-                    <AvatarImage src="/placeholder.svg" alt={userData?.name || "User"} />
+                    <AvatarImage src={userData?.avatar_url || "/placeholder.svg"} alt={userData?.name || "User"} />
                     <AvatarFallback className="bg-bhromani-purple text-white">
-                      {userData?.name?.substring(0, 2)?.toUpperCase() || "NN"}
+                      {userData?.name?.substring(0, 2)?.toUpperCase() || "TM"}
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/profile')}>
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/places')}>
                     <MapPin className="mr-2 h-4 w-4" />
                     <span>My Places</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/history')}>
                     <Calendar className="mr-2 h-4 w-4" />
                     <span>Trip History</span>
                   </DropdownMenuItem>

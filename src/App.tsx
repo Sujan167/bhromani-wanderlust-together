@@ -9,6 +9,9 @@ import Login from "./pages/auth/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
 import CreateTrip from "./pages/trips/CreateTrip";
 import CreateGroup from "./pages/groups/CreateGroup";
+import Profile from "./pages/profile/Profile";
+import Places from "./pages/profile/Places";
+import History from "./pages/profile/History";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
@@ -75,6 +78,30 @@ const App = () => (
                 <Dashboard />
               </ProtectedRoute>
             } 
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/places"
+            element={
+              <ProtectedRoute>
+                <Places />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              <ProtectedRoute>
+                <History />
+              </ProtectedRoute>
+            }
           />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

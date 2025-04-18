@@ -20,14 +20,15 @@ const Login = () => {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <Link to="/" className="inline-block">
-              <h1 className="text-3xl font-bold text-bhromani-purple">Bhromani</h1>
+              <h1 className="text-3xl font-bold text-bhromani-purple">TrailMesh</h1>
+              <p className="text-sm text-gray-600 mt-1">Stay connected. Explore together.</p>
             </Link>
           </div>
           
           <AuthForm />
           
           <p className="text-xs text-center text-gray-500 mt-8">
-            By using Bhromani, you agree to our{" "}
+            By using TrailMesh, you agree to our{" "}
             <a href="#" className="text-bhromani-purple hover:underline">Terms of Service</a>
             {" "}and{" "}
             <a href="#" className="text-bhromani-purple hover:underline">Privacy Policy</a>.
@@ -36,7 +37,7 @@ const Login = () => {
       </div>
       
       <footer className="py-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} Bhromani. All rights reserved.
+        © {new Date().getFullYear()} TrailMesh. All rights reserved.
       </footer>
     </div>
   );

@@ -2,35 +2,30 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from './database.types';
 
-// Get environment variables or use fallback values for development
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const supabaseUrl = "https://aycufmjtliovtplnxulb.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5Y3VmbWp0bGlvdnRwbG54dWxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ5OTU2MDUsImV4cCI6MjA2MDU3MTYwNX0.4R_7WoyC_nBStwUlgpuPEPKd1G2cXwrM3FZaLrSy9uA";
 
-// Check if supabase credentials are available
-const hasValidCredentials = !!supabaseUrl && !!supabaseAnonKey;
+// The redirect URL for authentication
+const redirectTo = window.location.hostname === 'localhost' ? 
+  'http://localhost:8080' : 
+  'https://bhromani.sujanb.com.np';
 
-// Log warning if credentials are missing
-if (!hasValidCredentials) {
-  console.warn(
-    'Supabase URL and/or Anon Key are missing. Using fallback authentication mode. Make sure you have set the VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY environment variables.'
-  );
-}
-
-// Create a Supabase client only if we have valid credentials
-export const supabase = hasValidCredentials 
-  ? createClient<Database>(
-      supabaseUrl,
-      supabaseAnonKey,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-        },
-      }
-    )
-  : null as any; // Use null with type assertion for development without credentials
+// Create a Supabase client with the proper redirect
+export const supabase = createClient<Database>(
+  supabaseUrl,
+  supabaseAnonKey,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: 'pkce',
+      redirectTo: `${redirectTo}/dashboard`,
+    },
+  }
+);
 
 // Helper function to check if Supabase is properly configured
 export const isSupabaseConfigured = () => {
-  return hasValidCredentials;
+  return true;
 };
