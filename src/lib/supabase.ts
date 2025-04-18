@@ -19,11 +19,13 @@ export const supabase = createClient<Database>(
       persistSession: true,
       autoRefreshToken: true,
       detectSessionInUrl: true,
-      flowType: 'pkce',
-      redirectTo: `${redirectTo}/dashboard`,
-    },
+      flowType: 'pkce'
+    }
   }
 );
+
+// Separate function to handle redirects during authentication
+export const getAuthRedirectURL = () => `${redirectTo}/dashboard`;
 
 // Helper function to check if Supabase is properly configured
 export const isSupabaseConfigured = () => {
