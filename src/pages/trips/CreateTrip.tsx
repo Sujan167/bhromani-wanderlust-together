@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -75,7 +74,7 @@ const CreateTrip = () => {
       // Insert the trip into the database
       const { data: tripData, error } = await supabase
         .from("trips")
-        .insert({
+        .insert([{
           name: data.name,
           description: data.description || "",
           location: data.location,
@@ -83,7 +82,7 @@ const CreateTrip = () => {
           end_date: data.endDate.toISOString(),
           cover_image: data.coverImage || null,
           created_by: user.id,
-        })
+        }])
         .select()
         .single();
 
@@ -112,7 +111,7 @@ const CreateTrip = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bhromani-light-gray">
+    <div className="min-h-screen bg-trailmesh-light-gray">
       <Navbar />
       
       <main className="container mx-auto px-4 py-8">
@@ -274,7 +273,7 @@ const CreateTrip = () => {
                   </Button>
                   <Button 
                     type="submit"
-                    className="bg-bhromani-purple hover:bg-bhromani-purple-dark"
+                    className="bg-trailmesh-purple hover:bg-trailmesh-purple-dark"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Creating..." : "Create Trip"}

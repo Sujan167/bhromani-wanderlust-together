@@ -17,12 +17,12 @@ const Index = () => {
       <HeroSection />
       
       {/* Features Section */}
-      <div className="py-16 bg-bhromani-light-gray">
+      <div className="py-16 bg-trailmesh-light-gray">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900">Your All-in-One Travel Companion</h2>
             <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
-              Bhromani brings all your group travel needs into one seamless platform, 
+              TrailMesh brings all your group travel needs into one seamless platform, 
               so you can focus on creating memories, not managing logistics.
             </p>
           </div>
@@ -30,7 +30,7 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <Card>
               <CardHeader>
-                <MapPin className="h-10 w-10 text-bhromani-purple mb-2" />
+                <MapPin className="h-10 w-10 text-trailmesh-purple mb-2" />
                 <CardTitle>Real-time Location Sharing</CardTitle>
                 <CardDescription>
                   Stay connected with your travel buddies with live location tracking.
@@ -39,15 +39,15 @@ const Index = () => {
               <CardContent>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-bhromani-orange" />
+                    <Check className="h-4 w-4 text-trailmesh-orange" />
                     <span className="text-sm">See everyone's location on a map</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-bhromani-orange" />
+                    <Check className="h-4 w-4 text-trailmesh-orange" />
                     <span className="text-sm">Privacy controls for when to share</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-bhromani-orange" />
+                    <Check className="h-4 w-4 text-trailmesh-orange" />
                     <span className="text-sm">Safety check-ins for peace of mind</span>
                   </li>
                 </ul>
@@ -56,7 +56,7 @@ const Index = () => {
             
             <Card>
               <CardHeader>
-                <Calendar className="h-10 w-10 text-bhromani-purple mb-2" />
+                <Calendar className="h-10 w-10 text-trailmesh-purple mb-2" />
                 <CardTitle>Trip Planning Made Simple</CardTitle>
                 <CardDescription>
                   Organize your travel itinerary with ease and clarity.
@@ -65,15 +65,15 @@ const Index = () => {
               <CardContent>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-bhromani-orange" />
+                    <Check className="h-4 w-4 text-trailmesh-orange" />
                     <span className="text-sm">Create detailed day-by-day plans</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-bhromani-orange" />
+                    <Check className="h-4 w-4 text-trailmesh-orange" />
                     <span className="text-sm">Add checklists for must-do activities</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-bhromani-orange" />
+                    <Check className="h-4 w-4 text-trailmesh-orange" />
                     <span className="text-sm">Collaborate with your travel mates</span>
                   </li>
                 </ul>
@@ -82,7 +82,7 @@ const Index = () => {
             
             <Card>
               <CardHeader>
-                <MessageCircle className="h-10 w-10 text-bhromani-purple mb-2" />
+                <MessageCircle className="h-10 w-10 text-trailmesh-purple mb-2" />
                 <CardTitle>Group Chat & Coordination</CardTitle>
                 <CardDescription>
                   Keep all your travel conversations in one organized place.
@@ -91,15 +91,15 @@ const Index = () => {
               <CardContent>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-bhromani-orange" />
+                    <Check className="h-4 w-4 text-trailmesh-orange" />
                     <span className="text-sm">Real-time messaging with your group</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-bhromani-orange" />
+                    <Check className="h-4 w-4 text-trailmesh-orange" />
                     <span className="text-sm">Share photos, locations, and updates</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-bhromani-orange" />
+                    <Check className="h-4 w-4 text-trailmesh-orange" />
                     <span className="text-sm">Never lose important travel information</span>
                   </li>
                 </ul>
@@ -110,25 +110,25 @@ const Index = () => {
       </div>
       
       {/* CTA Section */}
-      <div className="py-16 bg-gradient-to-r from-bhromani-purple to-bhromani-purple-dark text-white">
+      <div className="py-16 bg-gradient-to-r from-trailmesh-purple to-trailmesh-purple-dark text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Transform Your Group Travel?</h2>
           <p className="text-lg mb-8 max-w-2xl mx-auto">
-            Join Bhromani today and make your next adventure with friends and family 
+            Join TrailMesh today and make your next adventure with friends and family 
             the most organized, connected, and memorable one yet.
           </p>
-          <Button size="lg" className="bg-white text-bhromani-purple hover:bg-gray-100">
+          <Button size="lg" className="bg-white text-trailmesh-purple hover:bg-gray-100">
             {isLoggedIn ? "Create Your First Trip" : "Get Started for Free"}
           </Button>
         </div>
       </div>
       
       {/* Footer */}
-      <footer className="bg-bhromani-dark-purple text-white py-12">
+      <footer className="bg-trailmesh-dark-purple text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-bold mb-4">Bhromani</h3>
+              <h3 className="text-lg font-bold mb-4">TrailMesh</h3>
               <p className="text-sm text-gray-300">
                 Making group travel easier, more organized, and fun.
               </p>
@@ -180,7 +180,7 @@ const Index = () => {
           
           <div className="mt-8 pt-8 border-t border-gray-700">
             <p className="text-sm text-gray-400 text-center">
-              © {new Date().getFullYear()} Bhromani. All rights reserved.
+              © {new Date().getFullYear()} TrailMesh. All rights reserved.
             </p>
           </div>
         </div>

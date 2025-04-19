@@ -32,7 +32,7 @@ export const MessageInput = ({ message, setMessage, handleSendMessage }: Message
         
         <Button
           onClick={handleSendMessage}
-          className="ml-2 bg-bhromani-purple hover:bg-bhromani-purple-dark"
+          className="ml-2 bg-trailmesh-purple hover:bg-trailmesh-purple-dark"
           size="icon"
           disabled={!message.trim()}
         >

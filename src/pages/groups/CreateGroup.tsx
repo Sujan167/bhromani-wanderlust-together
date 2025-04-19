@@ -61,12 +61,12 @@ const CreateGroup = () => {
       // Insert the group into the database
       const { data: groupData, error } = await supabase
         .from("groups")
-        .insert({
+        .insert([{
           name: data.name,
           description: data.description || "",
           cover_image: data.coverImage || null,
           created_by: user.id,
-        })
+        }])
         .select()
         .single();
 
@@ -79,11 +79,11 @@ const CreateGroup = () => {
       if (groupData) {
         const { error: membershipError } = await supabase
           .from("group_members")
-          .insert({
+          .insert([{
             group_id: groupData.id,
             user_id: user.id,
             role: 'organizer',
-          });
+          }]);
 
         if (membershipError) {
           console.error("Membership error:", membershipError);
@@ -111,7 +111,7 @@ const CreateGroup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bhromani-light-gray">
+    <div className="min-h-screen bg-trailmesh-light-gray">
       <Navbar />
       
       <main className="container mx-auto px-4 py-8">
@@ -177,7 +177,7 @@ const CreateGroup = () => {
                   </Button>
                   <Button 
                     type="submit"
-                    className="bg-bhromani-purple hover:bg-bhromani-purple-dark"
+                    className="bg-trailmesh-purple hover:bg-trailmesh-purple-dark"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Creating..." : "Create Group"}

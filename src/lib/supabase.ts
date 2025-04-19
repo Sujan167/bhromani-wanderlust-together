@@ -8,7 +8,7 @@ const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 // The redirect URL for authentication
 const redirectTo = window.location.hostname === 'localhost' ? 
   'http://localhost:8080' : 
-  'https://bhromani.sujanb.com.np';
+  'https://trailmesh.sujanb.com.np';
 
 // Create a Supabase client with the proper redirect
 export const supabase = createClient<Database>(

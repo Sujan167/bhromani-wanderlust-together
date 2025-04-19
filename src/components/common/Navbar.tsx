@@ -49,7 +49,7 @@ const Navbar = () => {
             id: session.user.id,
             name: profileData?.full_name || session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
             email: session.user.email || '',
-            avatar_url: profileData?.avatar_url || null
+            avatar_url: profileData?.avatar_url || 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=150&h=150'
           });
         } else {
           setUserData(null);
@@ -73,7 +73,7 @@ const Navbar = () => {
           id: session.user.id,
           name: profileData?.full_name || session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
           email: session.user.email || '',
-          avatar_url: profileData?.avatar_url || null
+          avatar_url: profileData?.avatar_url || 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=150&h=150'
         });
       }
     });
@@ -116,7 +116,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <Link to="/" className="flex items-center">
-            <span className="text-xl font-bold text-bhromani-purple">TrailMesh</span>
+            <span className="text-xl font-bold text-trailmesh-purple">TrailMesh</span>
           </Link>
           
           {isLoggedIn && (
@@ -125,8 +125,8 @@ const Navbar = () => {
                 to="/trips" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/trips') 
-                    ? 'text-bhromani-purple' 
-                    : 'text-gray-600 hover:text-bhromani-purple'
+                    ? 'text-trailmesh-purple' 
+                    : 'text-gray-600 hover:text-trailmesh-purple'
                 }`}
               >
                 <Map size={18} /> Trips
@@ -135,8 +135,8 @@ const Navbar = () => {
                 to="/groups" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/groups') 
-                    ? 'text-bhromani-purple' 
-                    : 'text-gray-600 hover:text-bhromani-purple'
+                    ? 'text-trailmesh-purple' 
+                    : 'text-gray-600 hover:text-trailmesh-purple'
                 }`}
               >
                 <Users size={18} /> Groups
@@ -145,8 +145,8 @@ const Navbar = () => {
                 to="/discover" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/discover') 
-                    ? 'text-bhromani-purple' 
-                    : 'text-gray-600 hover:text-bhromani-purple'
+                    ? 'text-trailmesh-purple' 
+                    : 'text-gray-600 hover:text-trailmesh-purple'
                 }`}
               >
                 <MapPin size={18} /> Discover
@@ -160,14 +160,14 @@ const Navbar = () => {
             <>
               <Button variant="ghost" size="icon" className="relative">
                 <Bell size={20} />
-                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-bhromani-orange"></span>
+                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-trailmesh-orange"></span>
               </Button>
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="h-9 w-9 cursor-pointer">
                     <AvatarImage src={userData?.avatar_url || "/placeholder.svg"} alt={userData?.name || "User"} />
-                    <AvatarFallback className="bg-bhromani-purple text-white">
+                    <AvatarFallback className="bg-trailmesh-purple text-white">
                       {userData?.name?.substring(0, 2)?.toUpperCase() || "TM"}
                     </AvatarFallback>
                   </Avatar>
@@ -210,7 +210,7 @@ const Navbar = () => {
               <Button variant="ghost" asChild>
                 <Link to="/login">Login</Link>
               </Button>
-              <Button className="bg-bhromani-purple hover:bg-bhromani-purple-dark" onClick={handleLogin}>
+              <Button className="bg-trailmesh-purple hover:bg-trailmesh-purple-dark" onClick={handleLogin}>
                 Sign Up
               </Button>
             </>
@@ -226,7 +226,7 @@ const Navbar = () => {
               to="/trips" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/trips') 
-                  ? 'bg-bhromani-purple/10 text-bhromani-purple' 
+                  ? 'bg-trailmesh-purple/10 text-trailmesh-purple' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}
@@ -237,7 +237,7 @@ const Navbar = () => {
               to="/groups" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/groups') 
-                  ? 'bg-bhromani-purple/10 text-bhromani-purple' 
+                  ? 'bg-trailmesh-purple/10 text-trailmesh-purple' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}
@@ -248,7 +248,7 @@ const Navbar = () => {
               to="/discover" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/discover') 
-                  ? 'bg-bhromani-purple/10 text-bhromani-purple' 
+                  ? 'bg-trailmesh-purple/10 text-trailmesh-purple' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}

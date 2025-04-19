@@ -11,15 +11,15 @@ const HeroSection = () => {
           {/* Hero Content */}
           <div className="lg:w-1/2 space-y-8 text-center lg:text-left">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">
-              <span className="block text-bhromani-purple">Group Travel Made</span>
+              <span className="block text-trailmesh-purple">Group Travel Made</span>
               <span className="block">Easy and Fun</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl">
-              Bhromani helps you organize trips, stay connected with your travel companions, 
+              TrailMesh helps you organize trips, stay connected with your travel companions, 
               share locations, and create memories together. No more chaotic group travels.
             </p>
             <div className="mt-10 flex items-center justify-center lg:justify-start gap-x-6">
-              <Button className="bg-bhromani-purple hover:bg-bhromani-purple-dark text-white px-8 py-6 rounded-full">
+              <Button className="bg-trailmesh-purple hover:bg-trailmesh-purple-dark text-white px-8 py-6 rounded-full">
                 Get Started
               </Button>
               <Link to="/discover" className="text-sm font-semibold leading-6 text-gray-900 flex items-center">
@@ -30,19 +30,19 @@ const HeroSection = () => {
             {/* Feature bullets */}
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-bhromani-orange" />
+                <MapPin className="h-5 w-5 text-trailmesh-orange" />
                 <span className="text-sm text-gray-600">Real-time location sharing</span>
               </div>
               <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-bhromani-orange" />
+                <Users className="h-5 w-5 text-trailmesh-orange" />
                 <span className="text-sm text-gray-600">Easy group creation</span>
               </div>
               <div className="flex items-center gap-2">
-                <MessageCircle className="h-5 w-5 text-bhromani-orange" />
+                <MessageCircle className="h-5 w-5 text-trailmesh-orange" />
                 <span className="text-sm text-gray-600">Group messaging</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckSquare className="h-5 w-5 text-bhromani-orange" />
+                <CheckSquare className="h-5 w-5 text-trailmesh-orange" />
                 <span className="text-sm text-gray-600">Trip planning tools</span>
               </div>
             </div>
@@ -61,7 +61,7 @@ const HeroSection = () => {
               {/* Floating UI Elements */}
               <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
                 <div className="flex items-center space-x-2">
-                  <div className="h-8 w-8 rounded-full bg-bhromani-purple-dark flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-full bg-trailmesh-purple-dark flex items-center justify-center">
                     <Users className="h-4 w-4 text-white" />
                   </div>
                   <div>
@@ -73,7 +73,7 @@ const HeroSection = () => {
               
               <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg">
                 <div className="flex items-center space-x-2">
-                  <div className="h-8 w-8 rounded-full bg-bhromani-orange flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-full bg-trailmesh-orange flex items-center justify-center">
                     <MapPin className="h-4 w-4 text-white" />
                   </div>
                   <div>
