@@ -18,6 +18,6 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
 export const getAuthRedirectURL = () => {
   const redirectTo = window.location.hostname === 'localhost' ? 
     'http://localhost:8080' : 
-    'https://bhromani.sujanb.com.np';
+    'https://trailmesh.sujanb.com.np';
   return `${redirectTo}/dashboard`;
 };

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,36 +14,36 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Custom Bhromani Colors */
-    --primary: 256 82% 74%;  /* #9B87F5 (purple) */
+    /* Royal Blue Colors */
+    --primary: 225 80% 55%;  /* Royal Blue: #2563eb */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 32 98% 53%; /* #F97316 (orange) */
+    --secondary: 234 89% 74%; /* Light Royal Blue: #93c5fd */
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 249 36% 97%;    /* #F1F0FB (light gray) */
+    --muted: 214 32% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 169 72% 50%;   /* #2DD4BF (teal) */
+    --accent: 213 94% 68%;   /* #3b82f6 (bright blue) */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 249 36% 90%;
-    --input: 249 36% 90%;
-    --ring: 256 82% 74%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 225 80% 55%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 249 36% 97%; 
+    --sidebar-background: 214 32% 96%; 
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 256 82% 74%;
+    --sidebar-primary: 225 80% 55%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 249 36% 90%;
-    --sidebar-ring: 256 82% 74%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 225 80% 55%;
   }
 
   .dark {

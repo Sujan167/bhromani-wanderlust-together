@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -62,16 +63,15 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-        // Bhromani custom colors
-        bhromani: {
-          purple: '#9B87F5',
-          'purple-dark': '#7E69AB',
-          orange: '#F97316',
-          teal: '#2DD4BF',
-          'light-gray': '#F1F0FB',
+        // TrailMesh custom colors
+        trailmesh: {
+          blue: '#2563eb',
+          'blue-dark': '#1e40af',
+          'light-blue': '#93c5fd',
+          'light-gray': '#f1f5f9',
           'neutral-gray': '#8E9196',
-          'dark-purple': '#1A1F2C',
-          'soft-peach': '#FDE1D3',
+          'dark-blue': '#1e3a8a',
+          'soft-blue': '#dbeafe',
         }
 			},
 			borderRadius: {

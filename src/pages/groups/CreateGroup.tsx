@@ -111,13 +111,16 @@ const CreateGroup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-trailmesh-light-gray">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
       
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h1 className="text-2xl font-bold text-gray-900 mb-6">Create a New Group</h1>
+            <div className="flex items-center gap-2 mb-6">
+              <Users className="h-6 w-6 text-blue-600" />
+              <h1 className="text-2xl font-bold text-gray-900">Create a New Group</h1>
+            </div>
             
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -171,13 +174,13 @@ const CreateGroup = () => {
                   <Button 
                     variant="outline" 
                     type="button"
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() => navigate("/groups")}
                   >
                     Cancel
                   </Button>
                   <Button 
                     type="submit"
-                    className="bg-trailmesh-purple hover:bg-trailmesh-purple-dark"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Creating..." : "Create Group"}

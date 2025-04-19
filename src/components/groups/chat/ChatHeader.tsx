@@ -18,7 +18,7 @@ export const ChatHeader = ({ groupDetails }: ChatHeaderProps) => {
       <div className="flex items-center">
         <Avatar>
           <AvatarImage src="/placeholder.svg" alt="Group" />
-          <AvatarFallback className="bg-trailmesh-purple text-white">
+          <AvatarFallback className="bg-blue-600 text-white">
             {groupDetails?.name.charAt(0) || "G"}
           </AvatarFallback>
         </Avatar>
