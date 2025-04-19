@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Search, Calendar, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, getCurrentUser } from "@/integrations/supabase/client";
 import Navbar from "@/components/common/Navbar";
 import { toast } from "@/components/ui/use-toast";
 import { format } from "date-fns";
@@ -32,8 +32,8 @@ const TripsPage = () => {
       try {
         setIsLoading(true);
         
-        // Get the current user
-        const { data: { user } } = await supabase.auth.getUser();
+        // Get the current user using our helper function
+        const user = await getCurrentUser();
         
         if (!user) {
           throw new Error("User not authenticated");
@@ -45,8 +45,12 @@ const TripsPage = () => {
           .select("*")
           .eq("created_by", user.id);
 
-        if (error) throw error;
+        if (error) {
+          console.error("Supabase error:", error);
+          throw error;
+        }
 
+        console.log("Fetched trips:", data);
         setTrips(data || []);
       } catch (error: any) {
         console.error("Error fetching trips:", error);
@@ -64,8 +68,8 @@ const TripsPage = () => {
   }, []);
 
   const filteredTrips = trips.filter(trip => 
-    trip.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    trip.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    trip.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    trip.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (trip.description && trip.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, getCurrentUser } from "@/integrations/supabase/client";
 import Navbar from "@/components/common/Navbar";
 import GroupCard from "@/components/groups/GroupCard";
 import { toast } from "@/components/ui/use-toast";
@@ -38,12 +38,14 @@ const GroupsPage = () => {
       try {
         setIsLoading(true);
         
-        // Get the current user
-        const { data: { user } } = await supabase.auth.getUser();
+        // Get the current user using our helper function
+        const user = await getCurrentUser();
         
         if (!user) {
           throw new Error("User not authenticated");
         }
+
+        console.log("Fetching groups for user:", user.id);
 
         // Get groups the user is a member of
         const { data: memberGroups, error: memberError } = await supabase
@@ -51,9 +53,15 @@ const GroupsPage = () => {
           .select("group_id")
           .eq("user_id", user.id);
 
-        if (memberError) throw memberError;
+        if (memberError) {
+          console.error("Error fetching member groups:", memberError);
+          throw memberError;
+        }
+
+        console.log("Member groups:", memberGroups);
 
         if (!memberGroups || memberGroups.length === 0) {
+          console.log("No member groups found");
           setGroups([]);
           setIsLoading(false);
           return;
@@ -67,7 +75,12 @@ const GroupsPage = () => {
           .select("*")
           .in("id", groupIds);
 
-        if (groupError) throw groupError;
+        if (groupError) {
+          console.error("Error fetching group details:", groupError);
+          throw groupError;
+        }
+
+        console.log("Group data:", groupData);
 
         // For each group, get member count and some sample members
         const enhancedGroups = await Promise.all(
@@ -130,6 +143,7 @@ const GroupsPage = () => {
           })
         );
 
+        console.log("Enhanced groups:", enhancedGroups);
         setGroups(enhancedGroups);
       } catch (error: any) {
         console.error("Error fetching groups:", error);
@@ -147,7 +161,7 @@ const GroupsPage = () => {
   }, []);
 
   const filteredGroups = groups.filter(group => 
-    group.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    group.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (group.description && group.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 

@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 
 const Login = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bhromani-light-gray to-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-white flex flex-col">
       <div className="py-4 px-8">
         <Button variant="ghost" asChild className="flex items-center text-gray-700">
           <Link to="/">
@@ -20,7 +20,7 @@ const Login = () => {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <Link to="/" className="inline-block">
-              <h1 className="text-3xl font-bold text-bhromani-purple">TrailMesh</h1>
+              <h1 className="text-3xl font-bold text-trailmesh-blue">TrailMesh</h1>
               <p className="text-sm text-gray-600 mt-1">Stay connected. Explore together.</p>
             </Link>
           </div>
@@ -29,9 +29,9 @@ const Login = () => {
           
           <p className="text-xs text-center text-gray-500 mt-8">
             By using TrailMesh, you agree to our{" "}
-            <a href="#" className="text-bhromani-purple hover:underline">Terms of Service</a>
+            <a href="#" className="text-trailmesh-blue hover:underline">Terms of Service</a>
             {" "}and{" "}
-            <a href="#" className="text-bhromani-purple hover:underline">Privacy Policy</a>.
+            <a href="#" className="text-trailmesh-blue hover:underline">Privacy Policy</a>.
           </p>
         </div>
       </div>

@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -24,7 +23,7 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { toast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, getCurrentUser } from "@/integrations/supabase/client";
 import Navbar from "@/components/common/Navbar";
 
 const tripFormSchema = z.object({
@@ -41,6 +40,7 @@ type TripFormValues = z.infer<typeof tripFormSchema>;
 const CreateTrip = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [today] = useState(new Date());
 
   const form = useForm<TripFormValues>({
     resolver: zodResolver(tripFormSchema),
@@ -49,14 +49,20 @@ const CreateTrip = () => {
       description: "",
       location: "",
       coverImage: "",
+      startDate: today,
+      endDate: new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000),
     },
   });
+
+  useEffect(() => {
+    form.setValue("startDate", today);
+    form.setValue("endDate", new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000));
+  }, [form, today]);
 
   const onSubmit = async (data: TripFormValues) => {
     setIsSubmitting(true);
     try {
-      // Get the current user
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await getCurrentUser();
       
       if (!user) {
         throw new Error("User not authenticated");
@@ -72,7 +78,6 @@ const CreateTrip = () => {
         created_by: user.id,
       });
 
-      // Insert the trip into the database
       const { data: tripData, error } = await supabase
         .from("trips")
         .insert([{
@@ -97,7 +102,6 @@ const CreateTrip = () => {
         description: "Your new trip has been created successfully.",
       });
 
-      // Redirect to the trips list
       navigate("/trips");
     } catch (error: any) {
       console.error("Error creating trip:", error);
@@ -203,9 +207,15 @@ const CreateTrip = () => {
                               selected={field.value}
                               onSelect={field.onChange}
                               disabled={(date) => {
-                                const today = new Date();
-                                today.setHours(0, 0, 0, 0);
-                                return date < today && date.getDate() !== today.getDate();
+                                const now = new Date();
+                                const isToday = date.getDate() === now.getDate() &&
+                                  date.getMonth() === now.getMonth() &&
+                                  date.getFullYear() === now.getFullYear();
+                                  
+                                if (isToday) return false;
+                                
+                                now.setHours(0, 0, 0, 0);
+                                return date < now;
                               }}
                               initialFocus
                               className="p-3 pointer-events-auto"
@@ -246,9 +256,9 @@ const CreateTrip = () => {
                               onSelect={field.onChange}
                               disabled={(date) => {
                                 const startDate = form.getValues().startDate;
-                                const today = new Date();
-                                today.setHours(0, 0, 0, 0);
-                                return startDate ? date < startDate : date < today;
+                                if (!startDate) return false;
+                                
+                                return date < startDate;
                               }}
                               initialFocus
                               className="p-3 pointer-events-auto"
@@ -287,6 +297,7 @@ const CreateTrip = () => {
                     type="submit"
                     variant="royal"
                     disabled={isSubmitting}
+                    className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark text-white"
                   >
                     {isSubmitting ? "Creating..." : "Create Trip"}
                   </Button>

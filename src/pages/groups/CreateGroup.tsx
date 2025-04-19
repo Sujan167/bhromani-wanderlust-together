@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, getCurrentUser } from "@/integrations/supabase/client";
 import Navbar from "@/components/common/Navbar";
 
 const groupFormSchema = z.object({
@@ -45,7 +45,7 @@ const CreateGroup = () => {
     setIsSubmitting(true);
     try {
       // Get the current user
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await getCurrentUser();
       
       if (!user) {
         throw new Error("User not authenticated");
@@ -182,6 +182,7 @@ const CreateGroup = () => {
                     type="submit"
                     variant="royal"
                     disabled={isSubmitting}
+                    className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark text-white"
                   >
                     {isSubmitting ? "Creating..." : "Create Group"}
                   </Button>

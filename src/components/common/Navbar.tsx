@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Bell, MapPin, MapPinOff, LogOut, User, Users, Calendar, Map } from "lucide-react";
+import { Menu, Bell, LogOut, User, Users, Calendar, Map } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
@@ -83,7 +83,7 @@ const Navbar = () => {
     };
   }, []);
   
-  // Handle login (for demo purposes - normally would redirect to login page)
+  // Handle login
   const handleLogin = () => {
     navigate('/login');
   };
@@ -116,7 +116,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <Link to="/" className="flex items-center">
-            <span className="text-xl font-bold text-trailmesh-purple">TrailMesh</span>
+            <span className="text-xl font-bold text-trailmesh-blue">TrailMesh</span>
           </Link>
           
           {isLoggedIn && (
@@ -125,8 +125,8 @@ const Navbar = () => {
                 to="/trips" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/trips') 
-                    ? 'text-trailmesh-purple' 
-                    : 'text-gray-600 hover:text-trailmesh-purple'
+                    ? 'text-trailmesh-blue' 
+                    : 'text-gray-600 hover:text-trailmesh-blue'
                 }`}
               >
                 <Map size={18} /> Trips
@@ -135,8 +135,8 @@ const Navbar = () => {
                 to="/groups" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/groups') 
-                    ? 'text-trailmesh-purple' 
-                    : 'text-gray-600 hover:text-trailmesh-purple'
+                    ? 'text-trailmesh-blue' 
+                    : 'text-gray-600 hover:text-trailmesh-blue'
                 }`}
               >
                 <Users size={18} /> Groups
@@ -145,11 +145,11 @@ const Navbar = () => {
                 to="/discover" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/discover') 
-                    ? 'text-trailmesh-purple' 
-                    : 'text-gray-600 hover:text-trailmesh-purple'
+                    ? 'text-trailmesh-blue' 
+                    : 'text-gray-600 hover:text-trailmesh-blue'
                 }`}
               >
-                <MapPin size={18} /> Discover
+                <Map size={18} /> Discover
               </Link>
             </div>
           )}
@@ -160,14 +160,14 @@ const Navbar = () => {
             <>
               <Button variant="ghost" size="icon" className="relative">
                 <Bell size={20} />
-                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-trailmesh-orange"></span>
+                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
               </Button>
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="h-9 w-9 cursor-pointer">
                     <AvatarImage src={userData?.avatar_url || "/placeholder.svg"} alt={userData?.name || "User"} />
-                    <AvatarFallback className="bg-trailmesh-purple text-white">
+                    <AvatarFallback className="bg-trailmesh-blue text-white">
                       {userData?.name?.substring(0, 2)?.toUpperCase() || "TM"}
                     </AvatarFallback>
                   </Avatar>
@@ -180,7 +180,7 @@ const Navbar = () => {
                     <span>Profile</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/places')}>
-                    <MapPin className="mr-2 h-4 w-4" />
+                    <Map className="mr-2 h-4 w-4" />
                     <span>My Places</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/history')}>
@@ -207,10 +207,14 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Button variant="ghost" asChild>
+              <Button variant="ghost" asChild className="text-trailmesh-blue hover:text-trailmesh-blue-dark">
                 <Link to="/login">Login</Link>
               </Button>
-              <Button className="bg-trailmesh-purple hover:bg-trailmesh-purple-dark" onClick={handleLogin}>
+              <Button 
+                variant="royal" 
+                className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark text-white" 
+                onClick={handleLogin}
+              >
                 Sign Up
               </Button>
             </>
@@ -226,7 +230,7 @@ const Navbar = () => {
               to="/trips" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/trips') 
-                  ? 'bg-trailmesh-purple/10 text-trailmesh-purple' 
+                  ? 'bg-trailmesh-blue/10 text-trailmesh-blue' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}
@@ -237,7 +241,7 @@ const Navbar = () => {
               to="/groups" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/groups') 
-                  ? 'bg-trailmesh-purple/10 text-trailmesh-purple' 
+                  ? 'bg-trailmesh-blue/10 text-trailmesh-blue' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}
@@ -248,12 +252,12 @@ const Navbar = () => {
               to="/discover" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/discover') 
-                  ? 'bg-trailmesh-purple/10 text-trailmesh-purple' 
+                  ? 'bg-trailmesh-blue/10 text-trailmesh-blue' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}
             >
-              <MapPin size={18} /> Discover
+              <Map size={18} /> Discover
             </Link>
           </div>
         </div>

@@ -14,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Royal Blue Colors */
+    /* Royal Blue Colors - Enhanced */
     --primary: 225 80% 55%;  /* Royal Blue: #2563eb */
     --primary-foreground: 0 0% 100%;
 
@@ -100,5 +100,25 @@ a.footer-link {
 }
 
 .btn-signup {
+  @apply bg-trailmesh-blue text-white hover:bg-trailmesh-blue-dark;
+}
+
+/* Enhanced footer styles for better visibility */
+footer {
+  @apply text-white;
+}
+
+footer h3,
+footer h4 {
+  @apply text-white font-bold;
+}
+
+footer a,
+footer p {
+  @apply text-gray-200 hover:text-white transition-colors;
+}
+
+/* Enhanced button styles with royal blue */
+.btn-primary {
   @apply bg-trailmesh-blue text-white hover:bg-trailmesh-blue-dark;
 }

@@ -16,9 +16,25 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
 
 // Export a function to get the redirect URL
 export const getAuthRedirectURL = () => {
-  // Changed from bhromani to trailmesh
+  // Updated to ensure we're using trailmesh consistently
   const redirectTo = window.location.hostname === 'localhost' ? 
     'http://localhost:8080' : 
     'https://trailmesh.sujanb.com.np';
+    
+  // Include hash to ensure proper redirection
   return `${redirectTo}/dashboard`;
+};
+
+// Helper function to fetch user data that can be reused across components
+export const getCurrentUser = async () => {
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    
+    if (error) throw error;
+    
+    return user;
+  } catch (error) {
+    console.error("Error fetching current user:", error);
+    return null;
+  }
 };
