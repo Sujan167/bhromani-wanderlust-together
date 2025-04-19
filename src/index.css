@@ -94,3 +94,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+a.footer-link {
+  @apply text-trailmesh-blue hover:text-trailmesh-blue-dark font-medium;
+}
+
+.btn-signup {
+  @apply bg-trailmesh-blue text-white hover:bg-trailmesh-blue-dark;
+}

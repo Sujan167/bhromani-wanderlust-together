@@ -16,6 +16,7 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
 
 // Export a function to get the redirect URL
 export const getAuthRedirectURL = () => {
+  // Changed from bhromani to trailmesh
   const redirectTo = window.location.hostname === 'localhost' ? 
     'http://localhost:8080' : 
     'https://trailmesh.sujanb.com.np';

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, MapPin, Users } from "lucide-react";
+import { CalendarIcon, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -119,7 +119,7 @@ const CreateTrip = () => {
         <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center gap-2 mb-6">
-              <MapPin className="h-6 w-6 text-blue-600" />
+              <MapPin className="h-6 w-6 text-trailmesh-blue" />
               <h1 className="text-2xl font-bold text-gray-900">Create a New Trip</h1>
             </div>
             
@@ -185,7 +185,7 @@ const CreateTrip = () => {
                           <PopoverTrigger asChild>
                             <FormControl>
                               <Button
-                                variant={"outline"}
+                                variant="outline"
                                 className={`pl-3 text-left font-normal ${!field.value && "text-muted-foreground"}`}
                               >
                                 {field.value ? (
@@ -202,8 +202,13 @@ const CreateTrip = () => {
                               mode="single"
                               selected={field.value}
                               onSelect={field.onChange}
-                              disabled={(date) => date < new Date()}
+                              disabled={(date) => {
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0);
+                                return date < today && date.getDate() !== today.getDate();
+                              }}
                               initialFocus
+                              className="p-3 pointer-events-auto"
                             />
                           </PopoverContent>
                         </Popover>
@@ -222,7 +227,7 @@ const CreateTrip = () => {
                           <PopoverTrigger asChild>
                             <FormControl>
                               <Button
-                                variant={"outline"}
+                                variant="outline"
                                 className={`pl-3 text-left font-normal ${!field.value && "text-muted-foreground"}`}
                               >
                                 {field.value ? (
@@ -241,9 +246,12 @@ const CreateTrip = () => {
                               onSelect={field.onChange}
                               disabled={(date) => {
                                 const startDate = form.getValues().startDate;
-                                return date < (startDate || new Date());
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0);
+                                return startDate ? date < startDate : date < today;
                               }}
                               initialFocus
+                              className="p-3 pointer-events-auto"
                             />
                           </PopoverContent>
                         </Popover>
@@ -277,7 +285,7 @@ const CreateTrip = () => {
                   </Button>
                   <Button 
                     type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    variant="royal"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Creating..." : "Create Trip"}

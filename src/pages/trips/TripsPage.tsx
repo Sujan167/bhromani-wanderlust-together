@@ -87,7 +87,7 @@ const TripsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bhromani-light-gray">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
       
       <main className="container mx-auto px-4 py-8">
@@ -100,7 +100,8 @@ const TripsPage = () => {
             
             <Button 
               onClick={handleCreateTrip}
-              className="mt-4 sm:mt-0 bg-bhromani-purple hover:bg-bhromani-purple-dark"
+              variant="royal"
+              className="mt-4 sm:mt-0"
             >
               <Plus className="mr-2 h-4 w-4" /> Create Trip
             </Button>
@@ -126,7 +127,7 @@ const TripsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredTrips.map((trip) => (
                 <div key={trip.id} className="bg-white rounded-xl shadow-md overflow-hidden">
-                  <div className="h-40 bg-gradient-to-r from-bhromani-purple to-bhromani-purple-dark relative">
+                  <div className="h-40 bg-gradient-to-r from-trailmesh-blue to-trailmesh-blue-dark relative">
                     {trip.cover_image && (
                       <img
                         src={trip.cover_image}
@@ -165,7 +166,7 @@ const TripsPage = () => {
                       </Button>
                       <Button 
                         size="sm"
-                        className="bg-bhromani-purple hover:bg-bhromani-purple-dark"
+                        variant="royal"
                         onClick={() => navigate(`/trips/${trip.id}`)}
                       >
                         View Trip
@@ -183,7 +184,7 @@ const TripsPage = () => {
                   ? "No trips match your search criteria. Try with a different term."
                   : "You haven't created any trips yet. Start planning your next adventure!"}
               </p>
-              <Button onClick={handleCreateTrip} className="bg-bhromani-purple hover:bg-bhromani-purple-dark">
+              <Button onClick={handleCreateTrip} variant="royal">
                 <Plus className="mr-2 h-4 w-4" /> Create Your First Trip
               </Button>
             </div>

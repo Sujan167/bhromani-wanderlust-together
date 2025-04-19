@@ -156,7 +156,7 @@ const GroupsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bhromani-light-gray">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
       
       <main className="container mx-auto px-4 py-8">
@@ -169,7 +169,8 @@ const GroupsPage = () => {
             
             <Button 
               onClick={handleCreateGroup}
-              className="mt-4 sm:mt-0 bg-bhromani-purple hover:bg-bhromani-purple-dark"
+              variant="royal"
+              className="mt-4 sm:mt-0"
             >
               <Plus className="mr-2 h-4 w-4" /> Create Group
             </Button>
@@ -214,7 +215,7 @@ const GroupsPage = () => {
                   ? "No groups match your search criteria. Try with a different term."
                   : "You haven't joined any groups yet. Create one or join an existing group."}
               </p>
-              <Button onClick={handleCreateGroup} className="bg-bhromani-purple hover:bg-bhromani-purple-dark">
+              <Button onClick={handleCreateGroup} variant="royal">
                 <Plus className="mr-2 h-4 w-4" /> Create Your First Group
               </Button>
             </div>
