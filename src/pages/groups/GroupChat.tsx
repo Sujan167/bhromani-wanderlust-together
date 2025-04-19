@@ -1,7 +1,8 @@
+
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { User } from "@supabase/supabase-js";
-import { Send, Image, Paperclip, ArrowLeft } from "lucide-react";
+import { Send, Image, Paperclip, ArrowLeft, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
