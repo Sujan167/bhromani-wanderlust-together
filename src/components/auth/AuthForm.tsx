@@ -1,7 +1,6 @@
-
-import { useState } from "react";
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { supabase, getAuthRedirectURL, googleOAuthConfig } from '@/integrations/supabase/client';
+import { supabase, getAuthRedirectURL } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,17 +8,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { FcGoogle } from 'react-icons/fc';
+import { Provider } from '@supabase/supabase-js';
 
 const AuthForm = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
   
-  // Login form state
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   
-  // Signup form state
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
   const [name, setName] = useState("");
@@ -121,11 +119,18 @@ const AuthForm = () => {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.auth.signInWithOAuth(googleOAuthConfig);
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google' as Provider,
+        options: {
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+          redirectTo: getAuthRedirectURL(),
+        },
+      });
       
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
       
     } catch (error: any) {
       toast({
