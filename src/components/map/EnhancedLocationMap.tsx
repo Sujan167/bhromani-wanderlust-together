@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { MapPin, User, Navigation } from 'lucide-react';
+import { MapPin, User, Navigation, Users } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { toast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
@@ -302,3 +302,4 @@ const EnhancedLocationMap = () => {
 };
 
 export default EnhancedLocationMap;
+
