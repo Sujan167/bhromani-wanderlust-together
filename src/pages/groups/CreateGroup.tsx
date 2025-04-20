@@ -121,7 +121,7 @@ const CreateGroup = () => {
         <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center gap-2 mb-6">
-              <Users className="h-6 w-6 text-trailmesh-blue" />
+              <Users className="h-6 w-6 text-amber-500" />
               <h1 className="text-2xl font-bold text-gray-900">Create a New Group</h1>
             </div>
             
@@ -188,7 +188,7 @@ const CreateGroup = () => {
                   </Button>
                   <Button 
                     type="submit"
-                    className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark text-white"
+                    className="bg-amber-500 hover:bg-amber-600 text-white"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Creating..." : "Create Group"}

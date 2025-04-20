@@ -42,7 +42,6 @@ const CreateTrip = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   
-  // Initialize with null instead of today to require explicit selection
   const form = useForm<TripFormValues>({
     resolver: zodResolver(tripFormSchema),
     defaultValues: {
@@ -50,8 +49,9 @@ const CreateTrip = () => {
       description: "",
       location: "",
       coverImage: "",
-      startDate: new Date(), // Current date
-      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+      // Leave these undefined so user has to select them explicitly
+      startDate: undefined,
+      endDate: undefined,
     },
   });
 
@@ -118,7 +118,7 @@ const CreateTrip = () => {
         <div className="max-w-3xl mx-auto">
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center gap-2 mb-6">
-              <MapPin className="h-6 w-6 text-trailmesh-blue" />
+              <MapPin className="h-6 w-6 text-amber-500" />
               <h1 className="text-2xl font-bold text-gray-900">Create a New Trip</h1>
             </div>
             
@@ -287,7 +287,7 @@ const CreateTrip = () => {
                   </Button>
                   <Button 
                     type="submit"
-                    className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark text-white"
+                    className="bg-amber-500 hover:bg-amber-600 text-white"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Creating..." : "Create Trip"}

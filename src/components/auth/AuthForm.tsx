@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { supabase, getAuthRedirectURL } from '@/integrations/supabase/client';
+import { supabase, getAuthRedirectURL, googleOAuthConfig } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { FcGoogle } from 'react-icons/fc';
-import { Provider } from '@supabase/supabase-js';
 
 const AuthForm = () => {
   const navigate = useNavigate();
@@ -119,16 +118,7 @@ const AuthForm = () => {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google' as Provider,
-        options: {
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
-          redirectTo: getAuthRedirectURL(),
-        },
-      });
+      const { data, error } = await supabase.auth.signInWithOAuth(googleOAuthConfig);
       
       if (error) throw error;
       

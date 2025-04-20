@@ -114,7 +114,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bhromani-light-gray">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
       
       <main className="container mx-auto px-4 py-8">
@@ -125,11 +125,11 @@ const Profile = () => {
             <div className="flex flex-col items-center mb-8">
               <Avatar className="h-24 w-24 mb-4">
                 <AvatarImage src={avatarUrl || "/placeholder.svg"} />
-                <AvatarFallback className="bg-bhromani-purple text-white text-xl">
+                <AvatarFallback className="bg-trailmesh-purple text-white text-xl">
                   {form.getValues().fullName?.substring(0, 2)?.toUpperCase() || "TM"}
                 </AvatarFallback>
               </Avatar>
-              <Button variant="outline" className="flex items-center gap-2">
+              <Button variant="outline" className="flex items-center gap-2 bg-white hover:bg-gray-50 border-gray-300">
                 <Upload size={16} /> Change Avatar
               </Button>
             </div>
@@ -196,12 +196,13 @@ const Profile = () => {
                     variant="outline" 
                     type="button"
                     onClick={() => navigate("/dashboard")}
+                    className="bg-white hover:bg-gray-50 border-gray-300"
                   >
                     Cancel
                   </Button>
                   <Button 
                     type="submit"
-                    className="bg-bhromani-purple hover:bg-bhromani-purple-dark"
+                    className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark text-white"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? "Saving..." : "Save Changes"}

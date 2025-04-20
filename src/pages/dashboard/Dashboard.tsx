@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Users, MapPin, Calendar, Navigation } from "lucide-react";
 import GroupCard from "@/components/groups/GroupCard";
-import LocationMap from "@/components/map/LocationMap";
+import EnhancedLocationMap from "@/components/map/EnhancedLocationMap";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("trips");
@@ -86,7 +86,7 @@ const Dashboard = () => {
               <span>New Trip</span>
             </Button>
             <Button 
-              className="flex items-center gap-2 bg-trailmesh-blue hover:bg-trailmesh-blue-dark"
+              className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600"
               onClick={handleCreateGroup}
             >
               <Plus className="h-4 w-4" />
@@ -122,14 +122,14 @@ const Dashboard = () => {
                     className="w-full h-32 object-cover rounded-t-lg"
                   />
                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium flex items-center">
-                    <Calendar className="h-3 w-3 mr-1 text-trailmesh-blue" />
+                    <Calendar className="h-3 w-3 mr-1 text-amber-500" />
                     <span>In 7 days</span>
                   </div>
                 </CardHeader>
                 <CardContent className="pt-4">
                   <CardTitle className="mb-1">Annapurna Circuit Trek</CardTitle>
                   <CardDescription className="flex items-center text-sm">
-                    <MapPin className="h-3 w-3 mr-1 text-trailmesh-blue" />
+                    <MapPin className="h-3 w-3 mr-1 text-amber-500" />
                     <span>Annapurna, Nepal</span>
                   </CardDescription>
                   <div className="mt-3 flex items-center justify-between">
@@ -146,7 +146,7 @@ const Dashboard = () => {
                         +1
                       </div>
                     </div>
-                    <Button size="sm" className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark">
+                    <Button size="sm" className="bg-amber-500 hover:bg-amber-600">
                       View Trip
                     </Button>
                   </div>
@@ -158,14 +158,14 @@ const Dashboard = () => {
                 className="border-dashed flex flex-col items-center justify-center p-6 h-full cursor-pointer hover:bg-gray-50 transition-colors"
                 onClick={handleCreateTrip}
               >
-                <div className="w-16 h-16 rounded-full bg-trailmesh-light-gray flex items-center justify-center mb-4">
-                  <Plus className="h-8 w-8 text-trailmesh-blue" />
+                <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mb-4">
+                  <Plus className="h-8 w-8 text-amber-500" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Create a New Trip</h3>
                 <p className="text-gray-600 text-sm text-center mb-4">
                   Plan your next adventure with friends or family
                 </p>
-                <Button className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark">
+                <Button className="bg-amber-500 hover:bg-amber-600">
                   Start Planning
                 </Button>
               </Card>
@@ -183,14 +183,14 @@ const Dashboard = () => {
                 className="border-dashed flex flex-col items-center justify-center p-6 h-full cursor-pointer hover:bg-gray-50 transition-colors"
                 onClick={handleCreateGroup}
               >
-                <div className="w-16 h-16 rounded-full bg-trailmesh-light-gray flex items-center justify-center mb-4">
-                  <Users className="h-8 w-8 text-trailmesh-blue" />
+                <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mb-4">
+                  <Users className="h-8 w-8 text-amber-500" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Create a New Group</h3>
                 <p className="text-gray-600 text-sm text-center mb-4">
                   Start a group with your travel companions
                 </p>
-                <Button className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark">
+                <Button className="bg-amber-500 hover:bg-amber-600">
                   Create Group
                 </Button>
               </Card>
@@ -199,9 +199,7 @@ const Dashboard = () => {
           
           <TabsContent value="map" className="bg-white p-6 rounded-xl shadow-sm">
             <h2 className="text-xl font-bold mb-4 text-gray-900">Your Travel Map</h2>
-            <div className="bg-trailmesh-light-blue bg-opacity-10 p-2 rounded-lg">
-              <LocationMap />
-            </div>
+            <EnhancedLocationMap />
           </TabsContent>
         </Tabs>
       </main>
