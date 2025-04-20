@@ -2,16 +2,52 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MapPin, Navigation, Users, Plus, Map as MapIcon } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
-// This is a mock component that simulates a map
-// In a real app, you would integrate with MapBox, Google Maps, etc.
 const LocationMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [isLocationSharing, setIsLocationSharing] = useState(false);
+  const [userLocation, setUserLocation] = useState<{lat: number; lng: number} | null>(null);
   
   // Toggle location sharing
   const toggleLocationSharing = () => {
-    setIsLocationSharing(!isLocationSharing);
+    if (!isLocationSharing) {
+      // Start sharing location
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setUserLocation({ lat: latitude, lng: longitude });
+            setIsLocationSharing(true);
+            toast({
+              title: "Location Sharing Enabled",
+              description: "Other group members can now see your location.",
+            });
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+            toast({
+              title: "Location Error",
+              description: "Unable to get your location. Please check your browser permissions.",
+              variant: "destructive",
+            });
+          }
+        );
+      } else {
+        toast({
+          title: "Location Not Supported",
+          description: "Your browser doesn't support geolocation.",
+          variant: "destructive",
+        });
+      }
+    } else {
+      // Stop sharing location
+      setIsLocationSharing(false);
+      toast({
+        title: "Location Sharing Disabled",
+        description: "You are no longer sharing your location.",
+      });
+    }
   };
   
   // Mock data for group members
@@ -22,27 +58,27 @@ const LocationMap = () => {
   ];
 
   return (
-    <div className="relative w-full h-[600px] rounded-xl overflow-hidden bg-bhromani-light-gray">
-      {/* This div would be replaced with actual map implementation */}
+    <div className="relative w-full h-[600px] rounded-xl overflow-hidden bg-trailmesh-light-gray">
+      {/* This div would be replaced with Mapbox implementation */}
       <div ref={mapRef} className="w-full h-full bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')] bg-cover bg-center">
-        {/* Map overlay with user pins would be dynamic in real implementation */}
+        {/* Map controls */}
         <div className="absolute right-4 top-4 flex flex-col space-y-3">
-          <Button size="icon" variant="secondary" className="bg-white/90 backdrop-blur-sm shadow-md hover:bg-white">
-            <MapIcon className="h-5 w-5 text-bhromani-purple" />
+          <Button size="icon" variant="secondary" className="bg-white shadow-md hover:bg-gray-100">
+            <MapIcon className="h-5 w-5 text-trailmesh-blue" />
           </Button>
-          <Button size="icon" variant="secondary" className="bg-white/90 backdrop-blur-sm shadow-md hover:bg-white">
-            <Navigation className="h-5 w-5 text-bhromani-purple" />
+          <Button size="icon" variant="secondary" className="bg-white shadow-md hover:bg-gray-100">
+            <Navigation className="h-5 w-5 text-trailmesh-blue" />
           </Button>
-          <Button size="icon" variant="secondary" className="bg-white/90 backdrop-blur-sm shadow-md hover:bg-white">
-            <Plus className="h-5 w-5 text-bhromani-purple" />
+          <Button size="icon" variant="secondary" className="bg-white shadow-md hover:bg-gray-100">
+            <Plus className="h-5 w-5 text-trailmesh-blue" />
           </Button>
         </div>
         
         {/* Member location indicators */}
-        <div className="absolute left-4 top-4 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-md">
+        <div className="absolute left-4 top-4 bg-white p-3 rounded-lg shadow-md">
           <div className="flex flex-col space-y-3">
             <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-bhromani-purple" />
+              <Users className="h-5 w-5 text-trailmesh-blue" />
               <span className="text-sm font-medium">Group Members</span>
             </div>
             <div className="space-y-2">
@@ -65,8 +101,8 @@ const LocationMap = () => {
             onClick={toggleLocationSharing}
             className={`flex items-center gap-2 ${
               isLocationSharing 
-                ? "bg-bhromani-purple" 
-                : "bg-white text-bhromani-purple border border-bhromani-purple"
+                ? "bg-trailmesh-blue text-white" 
+                : "bg-white text-trailmesh-blue border border-trailmesh-blue"
             }`}
           >
             <MapPin className="h-4 w-4" />
@@ -74,22 +110,25 @@ const LocationMap = () => {
           </Button>
         </div>
 
-        {/* Mock map pins - in a real app these would be dynamic */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="relative">
-            <MapPin size={30} className="text-bhromani-purple" />
-            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded shadow-md whitespace-nowrap">
-              <p className="text-xs font-medium">Kathmandu Durbar Square</p>
+        {/* Your location */}
+        {isLocationSharing && userLocation && (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="relative">
+              <MapPin size={35} className="text-trailmesh-blue animate-pulse" />
+              <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded shadow-md whitespace-nowrap">
+                <p className="text-xs font-medium">Your Location</p>
+              </div>
             </div>
           </div>
+        )}
+        
+        {/* Mock map pins */}
+        <div className="absolute top-[40%] left-[30%]">
+          <MapPin size={30} className="text-trailmesh-blue" />
         </div>
         
-        <div className="absolute top-[40%] left-[60%]">
-          <MapPin size={30} className="text-bhromani-orange" />
-        </div>
-        
-        <div className="absolute top-[60%] left-[40%]">
-          <MapPin size={30} className="text-bhromani-teal" />
+        <div className="absolute top-[60%] left-[60%]">
+          <MapPin size={30} className="text-trailmesh-blue" />
         </div>
       </div>
     </div>

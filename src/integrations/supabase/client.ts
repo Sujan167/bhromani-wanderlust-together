@@ -36,3 +36,15 @@ export const getCurrentUser = async () => {
     return null;
   }
 };
+
+// Google OAuth configuration
+export const googleOAuthConfig = {
+  provider: 'google',
+  options: {
+    queryParams: {
+      access_type: 'offline',
+      prompt: 'consent',
+    },
+    redirectTo: getAuthRedirectURL(),
+  }
+};

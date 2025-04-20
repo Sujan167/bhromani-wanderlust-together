@@ -151,7 +151,8 @@ const CreateGroup = () => {
                         <Textarea 
                           placeholder="Tell us about your group..." 
                           className="resize-none" 
-                          {...field} 
+                          {...field}
+                          value={field.value || ""} 
                         />
                       </FormControl>
                       <FormMessage />
@@ -166,7 +167,11 @@ const CreateGroup = () => {
                     <FormItem>
                       <FormLabel>Cover Image URL (optional)</FormLabel>
                       <FormControl>
-                        <Input placeholder="https://example.com/image.jpg" {...field} />
+                        <Input 
+                          placeholder="https://example.com/image.jpg" 
+                          {...field}
+                          value={field.value || ""} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

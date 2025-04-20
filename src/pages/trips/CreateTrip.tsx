@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -40,8 +41,8 @@ type TripFormValues = z.infer<typeof tripFormSchema>;
 const CreateTrip = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const [today] = useState(new Date());
-
+  
+  // Initialize with null instead of today to require explicit selection
   const form = useForm<TripFormValues>({
     resolver: zodResolver(tripFormSchema),
     defaultValues: {
@@ -49,15 +50,10 @@ const CreateTrip = () => {
       description: "",
       location: "",
       coverImage: "",
-      startDate: today,
-      endDate: new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000),
+      startDate: new Date(), // Current date
+      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
     },
   });
-
-  useEffect(() => {
-    form.setValue("startDate", today);
-    form.setValue("endDate", new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000));
-  }, [form, today]);
 
   const onSubmit = async (data: TripFormValues) => {
     setIsSubmitting(true);
@@ -89,8 +85,7 @@ const CreateTrip = () => {
           cover_image: data.coverImage || null,
           created_by: user.id,
         }])
-        .select()
-        .single();
+        .select();
 
       if (error) {
         console.error("Supabase error:", error);
@@ -154,6 +149,7 @@ const CreateTrip = () => {
                           placeholder="Brief description of your trip..." 
                           className="resize-none" 
                           {...field} 
+                          value={field.value || ""}
                         />
                       </FormControl>
                       <FormMessage />
@@ -207,15 +203,10 @@ const CreateTrip = () => {
                               selected={field.value}
                               onSelect={field.onChange}
                               disabled={(date) => {
-                                const now = new Date();
-                                const isToday = date.getDate() === now.getDate() &&
-                                  date.getMonth() === now.getMonth() &&
-                                  date.getFullYear() === now.getFullYear();
-                                  
-                                if (isToday) return false;
-                                
-                                now.setHours(0, 0, 0, 0);
-                                return date < now;
+                                // Allow selection of today's date and future dates
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0);
+                                return date < today;
                               }}
                               initialFocus
                               className="p-3 pointer-events-auto"
@@ -258,6 +249,7 @@ const CreateTrip = () => {
                                 const startDate = form.getValues().startDate;
                                 if (!startDate) return false;
                                 
+                                // Must be on or after start date
                                 return date < startDate;
                               }}
                               initialFocus
@@ -278,7 +270,7 @@ const CreateTrip = () => {
                     <FormItem>
                       <FormLabel>Cover Image URL (optional)</FormLabel>
                       <FormControl>
-                        <Input placeholder="https://example.com/image.jpg" {...field} />
+                        <Input placeholder="https://example.com/image.jpg" {...field} value={field.value || ""} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -295,9 +287,8 @@ const CreateTrip = () => {
                   </Button>
                   <Button 
                     type="submit"
-                    variant="royal"
-                    disabled={isSubmitting}
                     className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark text-white"
+                    disabled={isSubmitting}
                   >
                     {isSubmitting ? "Creating..." : "Create Trip"}
                   </Button>

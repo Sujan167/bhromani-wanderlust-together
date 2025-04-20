@@ -105,7 +105,7 @@ a.footer-link {
 
 /* Enhanced footer styles for better visibility */
 footer {
-  @apply text-white;
+  @apply bg-gray-800 text-white;
 }
 
 footer h3,
@@ -121,4 +121,30 @@ footer p {
 /* Enhanced button styles with royal blue */
 .btn-primary {
   @apply bg-trailmesh-blue text-white hover:bg-trailmesh-blue-dark;
+}
+
+/* Enhancing map elements */
+.map-element {
+  @apply text-trailmesh-blue;
+}
+
+/* Making the colors more vibrant and consistent */
+.text-trailmesh-blue {
+  @apply text-blue-600;
+}
+
+.hover\:text-trailmesh-blue-dark:hover {
+  @apply text-blue-800;
+}
+
+.bg-trailmesh-blue {
+  @apply bg-blue-600;
+}
+
+.hover\:bg-trailmesh-blue-dark:hover {
+  @apply bg-blue-800;
+}
+
+button[variant="royal"] {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
 }

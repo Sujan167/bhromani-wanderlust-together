@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase, getAuthRedirectURL } from '@/integrations/supabase/client';
+import { supabase, getAuthRedirectURL, googleOAuthConfig } from '@/integrations/supabase/client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -121,12 +121,7 @@ const AuthForm = () => {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: getAuthRedirectURL(),
-        },
-      });
+      const { data, error } = await supabase.auth.signInWithOAuth(googleOAuthConfig);
       
       if (error) {
         throw error;
@@ -208,7 +203,7 @@ const AuthForm = () => {
               <Button 
                 type="button" 
                 variant="outline" 
-                className="w-full"
+                className="w-full font-medium text-gray-700 hover:bg-gray-50"
                 onClick={handleGoogleSignIn}
                 disabled={isLoading}
               >
@@ -296,7 +291,7 @@ const AuthForm = () => {
               <Button 
                 type="button" 
                 variant="outline" 
-                className="w-full"
+                className="w-full font-medium text-gray-700 hover:bg-gray-50"
                 onClick={handleGoogleSignIn}
                 disabled={isLoading}
               >
