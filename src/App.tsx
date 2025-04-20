@@ -17,6 +17,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import GroupsPage from "./pages/groups/GroupsPage";
 import TripsPage from "./pages/trips/TripsPage";
 import GroupChat from "./pages/groups/GroupChat";
+import DiscoverPage from "./pages/discover/DiscoverPage";
 
 // Get the base URL from your CNAME/domain
 const baseUrl = '/';
@@ -86,7 +87,7 @@ const App = () => (
             path="/discover" 
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <DiscoverPage />
               </ProtectedRoute>
             } 
           />

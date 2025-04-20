@@ -30,6 +30,7 @@ const Navbar = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -41,18 +42,29 @@ const Navbar = () => {
         setIsLoggedIn(!!session);
         if (session?.user) {
           // Get user profile data if available
-          const { data: profileData } = await supabase
-            .from('profiles')
-            .select('full_name, avatar_url')
-            .eq('id', session.user.id)
-            .single();
-            
-          setUserData({
-            id: session.user.id,
-            name: profileData?.full_name || session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
-            email: session.user.email || '',
-            avatar_url: profileData?.avatar_url || DEFAULT_AVATAR
-          });
+          try {
+            const { data: profileData } = await supabase
+              .from('profiles')
+              .select('full_name, avatar_url')
+              .eq('id', session.user.id)
+              .maybeSingle();
+              
+            setUserData({
+              id: session.user.id,
+              name: profileData?.full_name || session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
+              email: session.user.email || '',
+              avatar_url: profileData?.avatar_url || DEFAULT_AVATAR
+            });
+          } catch (error) {
+            console.error("Error fetching profile:", error);
+            // Set default user data if profile fetch fails
+            setUserData({
+              id: session.user.id,
+              name: session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
+              email: session.user.email || '',
+              avatar_url: DEFAULT_AVATAR
+            });
+          }
         } else {
           setUserData(null);
         }
@@ -60,25 +72,46 @@ const Navbar = () => {
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session);
-      setIsLoggedIn(!!session);
-      if (session?.user) {
-        // Get user profile data if available
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('full_name, avatar_url')
-          .eq('id', session.user.id)
-          .single();
-          
-        setUserData({
-          id: session.user.id,
-          name: profileData?.full_name || session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
-          email: session.user.email || '',
-          avatar_url: profileData?.avatar_url || DEFAULT_AVATAR
-        });
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setSession(session);
+        setIsLoggedIn(!!session);
+        
+        if (session?.user) {
+          // Get user profile data if available
+          try {
+            const { data: profileData } = await supabase
+              .from('profiles')
+              .select('full_name, avatar_url')
+              .eq('id', session.user.id)
+              .maybeSingle();
+              
+            setUserData({
+              id: session.user.id,
+              name: profileData?.full_name || session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
+              email: session.user.email || '',
+              avatar_url: profileData?.avatar_url || DEFAULT_AVATAR
+            });
+          } catch (error) {
+            console.error("Error fetching profile:", error);
+            // Set default user data if profile fetch fails
+            setUserData({
+              id: session.user.id,
+              name: session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
+              email: session.user.email || '',
+              avatar_url: DEFAULT_AVATAR
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error checking session:", error);
+        setSession(null);
+        setIsLoggedIn(false);
       }
-    });
+    };
+    
+    checkSession();
 
     return () => {
       subscription.unsubscribe();
@@ -93,20 +126,32 @@ const Navbar = () => {
   // Handle logout
   const handleLogout = async () => {
     try {
+      setIsLoggingOut(true);
       const { error } = await supabase.auth.signOut();
+      
       if (error) throw error;
+      
+      // Clear state after logout
+      setSession(null);
+      setIsLoggedIn(false);
+      setUserData(null);
       
       toast({
         title: "Logged out successfully",
         description: "You have been logged out from your account.",
       });
+      
+      // Navigate to home page
       navigate('/');
     } catch (error: any) {
+      console.error("Logout error:", error);
       toast({
         variant: "destructive",
         title: "Error logging out",
         description: error.message || "Something went wrong",
       });
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
@@ -129,8 +174,8 @@ const Navbar = () => {
                 to="/trips" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/trips') 
-                    ? 'text-[#1e40af]' 
-                    : 'text-gray-600 hover:text-[#1e40af]'
+                    ? 'text-amber-500' 
+                    : 'text-gray-600 hover:text-amber-500'
                 }`}
               >
                 <Map size={18} /> Trips
@@ -139,8 +184,8 @@ const Navbar = () => {
                 to="/groups" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/groups') 
-                    ? 'text-[#1e40af]' 
-                    : 'text-gray-600 hover:text-[#1e40af]'
+                    ? 'text-amber-500' 
+                    : 'text-gray-600 hover:text-amber-500'
                 }`}
               >
                 <Users size={18} /> Groups
@@ -149,8 +194,8 @@ const Navbar = () => {
                 to="/discover" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/discover') 
-                    ? 'text-[#1e40af]' 
-                    : 'text-gray-600 hover:text-[#1e40af]'
+                    ? 'text-amber-500' 
+                    : 'text-gray-600 hover:text-amber-500'
                 }`}
               >
                 <Map size={18} /> Discover
@@ -163,15 +208,15 @@ const Navbar = () => {
           {isLoggedIn ? (
             <>
               <Button variant="ghost" size="icon" className="relative">
-                <Bell size={20} />
-                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                <Bell size={20} className="text-amber-500" />
+                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-amber-500"></span>
               </Button>
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Avatar className="h-9 w-9 cursor-pointer">
+                  <Avatar className="h-9 w-9 cursor-pointer border-2 border-[#1e40af]">
                     <AvatarImage src={userData?.avatar_url || DEFAULT_AVATAR} alt={userData?.name || "User"} />
-                    <AvatarFallback className="bg-[#1e40af] text-white">
+                    <AvatarFallback className="bg-amber-500 text-white">
                       {userData?.name?.substring(0, 2)?.toUpperCase() || "TM"}
                     </AvatarFallback>
                   </Avatar>
@@ -180,17 +225,17 @@ const Navbar = () => {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate('/profile')}>
-                    <User className="mr-2 h-4 w-4" />
+                    <User className="mr-2 h-4 w-4 text-amber-500" />
                     <span>Profile</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/places')}>
-                    <Map className="mr-2 h-4 w-4" />
+                    <Map className="mr-2 h-4 w-4 text-amber-500" />
                     <span>My Places</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log Out</span>
+                  <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut}>
+                    <LogOut className="mr-2 h-4 w-4 text-amber-500" />
+                    <span>{isLoggingOut ? "Logging out..." : "Log Out"}</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -202,16 +247,16 @@ const Navbar = () => {
                 className="md:hidden"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
-                <Menu size={20} />
+                <Menu size={20} className="text-amber-500" />
               </Button>
             </>
           ) : (
             <>
-              <Button variant="ghost" asChild className="text-[#1e40af] hover:text-[#1e3a8a]">
+              <Button variant="ghost" asChild className="text-[#1e40af] hover:text-amber-500">
                 <Link to="/login">Login</Link>
               </Button>
               <Button 
-                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white" 
+                className="bg-[#1e40af] hover:bg-amber-500 text-white" 
                 onClick={handleLogin}
               >
                 Sign Up
@@ -229,7 +274,7 @@ const Navbar = () => {
               to="/trips" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/trips') 
-                  ? 'bg-[#1e40af]/10 text-[#1e40af]' 
+                  ? 'bg-[#1e40af]/10 text-amber-500' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}
@@ -240,7 +285,7 @@ const Navbar = () => {
               to="/groups" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/groups') 
-                  ? 'bg-[#1e40af]/10 text-[#1e40af]' 
+                  ? 'bg-[#1e40af]/10 text-amber-500' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}
@@ -251,7 +296,7 @@ const Navbar = () => {
               to="/discover" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/discover') 
-                  ? 'bg-[#1e40af]/10 text-[#1e40af]' 
+                  ? 'bg-[#1e40af]/10 text-amber-500' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}

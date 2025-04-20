@@ -3,11 +3,119 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MapPin, Navigation, Users, Plus, Map as MapIcon } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import mapboxgl from 'mapbox-gl';
+
+// Temporary public token - in production, this should be stored in environment variables
+mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZXVzZXIiLCJhIjoiY2xzeTg1NmZxMWZ2YjJrcjBma2t3emloYSJ9.nLTk__Y0sMvZ1Z4Wy3uY9A';
 
 const LocationMap = () => {
-  const mapRef = useRef<HTMLDivElement>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const markersRef = useRef<mapboxgl.Marker[]>([]);
   const [isLocationSharing, setIsLocationSharing] = useState(false);
-  const [userLocation, setUserLocation] = useState<{lat: number; lng: number} | null>(null);
+  const [userLocation, setUserLocation] = useState<{lng: number; lat: number} | null>(null);
+  
+  // Initialize map when component mounts
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+
+    const map = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: 'mapbox://styles/mapbox/outdoors-v12',
+      center: [85.3240, 27.7172], // Default to Kathmandu
+      zoom: 13
+    });
+    
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    
+    mapRef.current = map;
+    
+    // Mock data for group members
+    const groupMembers = [
+      { id: 1, name: "Aarav", avatar: "/placeholder.svg", longitude: 85.3240, latitude: 27.7172 },
+      { id: 2, name: "Sita", avatar: "/placeholder.svg", longitude: 85.3230, latitude: 27.7152 },
+      { id: 3, name: "Ravi", avatar: "/placeholder.svg", longitude: 85.3250, latitude: 27.7192 },
+    ];
+    
+    // Add member markers once map is loaded
+    map.on('load', () => {
+      // Add markers for each group member
+      groupMembers.forEach(member => {
+        // Create custom HTML element for marker
+        const el = document.createElement('div');
+        el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
+        
+        // Create popup
+        const popup = new mapboxgl.Popup({ offset: 25 })
+          .setHTML(`
+            <div style="display: flex; align-items: center; padding: 4px">
+              <img src="${member.avatar}" alt="${member.name}" style="width: 24px; height: 24px; border-radius: 50%; margin-right: 8px">
+              <span style="font-weight: 500">${member.name}</span>
+            </div>
+          `);
+        
+        // Add marker to map
+        const marker = new mapboxgl.Marker(el)
+          .setLngLat([member.longitude, member.latitude])
+          .setPopup(popup)
+          .addTo(map);
+          
+        markersRef.current.push(marker);
+      });
+    });
+    
+    // Clean up on unmount
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+      }
+    };
+  }, []);
+  
+  // Update user location marker when userLocation changes
+  useEffect(() => {
+    if (!mapRef.current || !userLocation) return;
+    
+    // Remove existing user marker if any
+    const userMarkerIndex = markersRef.current.findIndex(marker => 
+      marker.getElement().classList.contains('user-marker')
+    );
+    
+    if (userMarkerIndex !== -1) {
+      markersRef.current[userMarkerIndex].remove();
+      markersRef.current.splice(userMarkerIndex, 1);
+    }
+    
+    // Create custom HTML element for marker
+    const el = document.createElement('div');
+    el.className = 'user-marker';
+    el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3" fill="#d97706"/></svg>`;
+    
+    // Create popup
+    const popup = new mapboxgl.Popup({ offset: 25 })
+      .setHTML(`
+        <div style="padding: 4px">
+          <span style="font-weight: 500">Your Location</span>
+        </div>
+      `);
+    
+    // Add marker to map
+    const marker = new mapboxgl.Marker(el)
+      .setLngLat([userLocation.lng, userLocation.lat])
+      .setPopup(popup)
+      .addTo(mapRef.current);
+      
+    // Store marker reference
+    markersRef.current.push(marker);
+    
+    // Pan map to user location
+    mapRef.current.flyTo({
+      center: [userLocation.lng, userLocation.lat],
+      zoom: 14,
+      essential: true
+    });
+    
+  }, [userLocation]);
   
   // Toggle location sharing
   const toggleLocationSharing = () => {
@@ -16,8 +124,8 @@ const LocationMap = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            const { latitude, longitude } = position.coords;
-            setUserLocation({ lat: latitude, lng: longitude });
+            const { longitude, latitude } = position.coords;
+            setUserLocation({ lng: longitude, lat: latitude });
             setIsLocationSharing(true);
             toast({
               title: "Location Sharing Enabled",
@@ -49,46 +157,38 @@ const LocationMap = () => {
       });
     }
   };
-  
-  // Mock data for group members
-  const groupMembers = [
-    { id: 1, name: "Aarav", avatar: "/placeholder.svg", latitude: 27.7172, longitude: 85.3240 },
-    { id: 2, name: "Sita", avatar: "/placeholder.svg", latitude: 27.7152, longitude: 85.3230 },
-    { id: 3, name: "Ravi", avatar: "/placeholder.svg", latitude: 27.7192, longitude: 85.3250 },
-  ];
 
   return (
     <div className="relative w-full h-[600px] rounded-xl overflow-hidden bg-trailmesh-light-gray">
-      {/* This div would be replaced with Mapbox implementation */}
-      <div ref={mapRef} className="w-full h-full bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')] bg-cover bg-center">
+      <div ref={mapContainerRef} className="w-full h-full">
         {/* Map controls */}
-        <div className="absolute right-4 top-4 flex flex-col space-y-3">
+        <div className="absolute right-4 top-4 flex flex-col space-y-3 z-10">
           <Button size="icon" variant="secondary" className="bg-white shadow-md hover:bg-gray-100">
-            <MapIcon className="h-5 w-5 text-trailmesh-blue" />
+            <MapIcon className="h-5 w-5 text-amber-500" />
           </Button>
           <Button size="icon" variant="secondary" className="bg-white shadow-md hover:bg-gray-100">
-            <Navigation className="h-5 w-5 text-trailmesh-blue" />
+            <Navigation className="h-5 w-5 text-amber-500" />
           </Button>
           <Button size="icon" variant="secondary" className="bg-white shadow-md hover:bg-gray-100">
-            <Plus className="h-5 w-5 text-trailmesh-blue" />
+            <Plus className="h-5 w-5 text-amber-500" />
           </Button>
         </div>
         
         {/* Member location indicators */}
-        <div className="absolute left-4 top-4 bg-white p-3 rounded-lg shadow-md">
+        <div className="absolute left-4 top-4 bg-white p-3 rounded-lg shadow-md z-10">
           <div className="flex flex-col space-y-3">
             <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-trailmesh-blue" />
+              <Users className="h-5 w-5 text-amber-500" />
               <span className="text-sm font-medium">Group Members</span>
             </div>
             <div className="space-y-2">
-              {groupMembers.map(member => (
-                <div key={member.id} className="flex items-center gap-2">
+              {["Aarav", "Sita", "Ravi"].map((name, index) => (
+                <div key={index} className="flex items-center gap-2">
                   <div className="relative">
-                    <img src={member.avatar} alt={member.name} className="h-8 w-8 rounded-full border-2 border-white" />
+                    <img src="/placeholder.svg" alt={name} className="h-8 w-8 rounded-full border-2 border-white" />
                     <span className="absolute -right-1 -bottom-1 h-3 w-3 rounded-full bg-green-500 border border-white"></span>
                   </div>
-                  <span className="text-sm">{member.name}</span>
+                  <span className="text-sm">{name}</span>
                 </div>
               ))}
             </div>
@@ -96,39 +196,18 @@ const LocationMap = () => {
         </div>
 
         {/* Location sharing toggle */}
-        <div className="absolute bottom-4 left-4">
+        <div className="absolute bottom-4 left-4 z-10">
           <Button 
             onClick={toggleLocationSharing}
             className={`flex items-center gap-2 ${
               isLocationSharing 
-                ? "bg-trailmesh-blue text-white" 
-                : "bg-white text-trailmesh-blue border border-trailmesh-blue"
+                ? "bg-amber-500 text-white hover:bg-amber-600" 
+                : "bg-white text-amber-500 border border-amber-500 hover:bg-amber-50"
             }`}
           >
             <MapPin className="h-4 w-4" />
             {isLocationSharing ? "Sharing Location" : "Share Location"}
           </Button>
-        </div>
-
-        {/* Your location */}
-        {isLocationSharing && userLocation && (
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="relative">
-              <MapPin size={35} className="text-trailmesh-blue animate-pulse" />
-              <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded shadow-md whitespace-nowrap">
-                <p className="text-xs font-medium">Your Location</p>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {/* Mock map pins */}
-        <div className="absolute top-[40%] left-[30%]">
-          <MapPin size={30} className="text-trailmesh-blue" />
-        </div>
-        
-        <div className="absolute top-[60%] left-[60%]">
-          <MapPin size={30} className="text-trailmesh-blue" />
         </div>
       </div>
     </div>
