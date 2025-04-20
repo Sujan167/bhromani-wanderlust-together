@@ -67,20 +67,23 @@ const CreateGroup = () => {
           cover_image: data.coverImage || null,
           created_by: user.id,
         }])
-        .select()
-        .single();
+        .select();
 
       if (error) {
         console.error("Supabase error:", error);
         throw error;
       }
 
+      console.log("Group created:", groupData);
+
       // Create a group membership for the creator
-      if (groupData) {
+      if (groupData && groupData.length > 0) {
+        const groupId = groupData[0].id;
+        
         const { error: membershipError } = await supabase
           .from("group_members")
           .insert([{
-            group_id: groupData.id,
+            group_id: groupId,
             user_id: user.id,
             role: 'organizer',
           }]);
@@ -180,9 +183,8 @@ const CreateGroup = () => {
                   </Button>
                   <Button 
                     type="submit"
-                    variant="royal"
-                    disabled={isSubmitting}
                     className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark text-white"
+                    disabled={isSubmitting}
                   >
                     {isSubmitting ? "Creating..." : "Create Group"}
                   </Button>

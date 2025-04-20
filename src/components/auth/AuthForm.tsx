@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
+import { FcGoogle } from 'react-icons/fc';
 
 const AuthForm = () => {
   const navigate = useNavigate();
@@ -117,6 +118,31 @@ const AuthForm = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: getAuthRedirectURL(),
+        },
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Google Login Failed",
+        description: error.message || "There was a problem with your Google login.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Card className="w-full">
       <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
@@ -165,9 +191,29 @@ const AuthForm = () => {
               </div>
             </CardContent>
             
-            <CardFooter>
-              <Button type="submit" className="w-full bg-bhromani-purple hover:bg-bhromani-purple-dark" disabled={isLoading}>
+            <CardFooter className="flex flex-col gap-4">
+              <Button type="submit" className="w-full bg-trailmesh-blue hover:bg-trailmesh-blue-dark" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
+              </Button>
+              
+              <div className="relative w-full">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-gray-300"></span>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                </div>
+              </div>
+              
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="w-full"
+                onClick={handleGoogleSignIn}
+                disabled={isLoading}
+              >
+                <FcGoogle className="h-5 w-5 mr-2" />
+                Continue with Google
               </Button>
             </CardFooter>
           </form>
@@ -233,9 +279,29 @@ const AuthForm = () => {
               </div>
             </CardContent>
             
-            <CardFooter>
-              <Button type="submit" className="w-full bg-bhromani-purple hover:bg-bhromani-purple-dark" disabled={isLoading}>
+            <CardFooter className="flex flex-col gap-4">
+              <Button type="submit" className="w-full bg-trailmesh-blue hover:bg-trailmesh-blue-dark" disabled={isLoading}>
                 {isLoading ? "Creating Account..." : "Create Account"}
+              </Button>
+              
+              <div className="relative w-full">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-gray-300"></span>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                </div>
+              </div>
+              
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="w-full"
+                onClick={handleGoogleSignIn}
+                disabled={isLoading}
+              >
+                <FcGoogle className="h-5 w-5 mr-2" />
+                Continue with Google
               </Button>
             </CardFooter>
           </form>

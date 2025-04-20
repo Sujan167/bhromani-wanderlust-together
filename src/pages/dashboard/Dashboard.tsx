@@ -67,7 +67,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bhromani-light-gray">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
       
       <main className="container mx-auto px-4 py-8">
@@ -86,7 +86,7 @@ const Dashboard = () => {
               <span>New Trip</span>
             </Button>
             <Button 
-              className="flex items-center gap-2 bg-bhromani-purple hover:bg-bhromani-purple-dark"
+              className="flex items-center gap-2 bg-trailmesh-blue hover:bg-trailmesh-blue-dark"
               onClick={handleCreateGroup}
             >
               <Plus className="h-4 w-4" />
@@ -122,14 +122,14 @@ const Dashboard = () => {
                     className="w-full h-32 object-cover rounded-t-lg"
                   />
                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium flex items-center">
-                    <Calendar className="h-3 w-3 mr-1 text-bhromani-purple" />
+                    <Calendar className="h-3 w-3 mr-1 text-trailmesh-blue" />
                     <span>In 7 days</span>
                   </div>
                 </CardHeader>
                 <CardContent className="pt-4">
                   <CardTitle className="mb-1">Annapurna Circuit Trek</CardTitle>
                   <CardDescription className="flex items-center text-sm">
-                    <MapPin className="h-3 w-3 mr-1 text-bhromani-orange" />
+                    <MapPin className="h-3 w-3 mr-1 text-trailmesh-blue" />
                     <span>Annapurna, Nepal</span>
                   </CardDescription>
                   <div className="mt-3 flex items-center justify-between">
@@ -142,11 +142,11 @@ const Dashboard = () => {
                           className="h-6 w-6 rounded-full border-2 border-white"
                         />
                       ))}
-                      <div className="h-6 w-6 rounded-full bg-bhromani-light-gray border-2 border-white flex items-center justify-center text-xs">
+                      <div className="h-6 w-6 rounded-full bg-trailmesh-light-gray border-2 border-white flex items-center justify-center text-xs">
                         +1
                       </div>
                     </div>
-                    <Button size="sm" className="bg-bhromani-purple hover:bg-bhromani-purple-dark">
+                    <Button size="sm" className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark">
                       View Trip
                     </Button>
                   </div>
@@ -158,14 +158,14 @@ const Dashboard = () => {
                 className="border-dashed flex flex-col items-center justify-center p-6 h-full cursor-pointer hover:bg-gray-50 transition-colors"
                 onClick={handleCreateTrip}
               >
-                <div className="w-16 h-16 rounded-full bg-bhromani-light-gray flex items-center justify-center mb-4">
-                  <Plus className="h-8 w-8 text-bhromani-purple" />
+                <div className="w-16 h-16 rounded-full bg-trailmesh-light-gray flex items-center justify-center mb-4">
+                  <Plus className="h-8 w-8 text-trailmesh-blue" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Create a New Trip</h3>
                 <p className="text-gray-600 text-sm text-center mb-4">
                   Plan your next adventure with friends or family
                 </p>
-                <Button className="bg-bhromani-purple hover:bg-bhromani-purple-dark">
+                <Button className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark">
                   Start Planning
                 </Button>
               </Card>
@@ -183,23 +183,23 @@ const Dashboard = () => {
                 className="border-dashed flex flex-col items-center justify-center p-6 h-full cursor-pointer hover:bg-gray-50 transition-colors"
                 onClick={handleCreateGroup}
               >
-                <div className="w-16 h-16 rounded-full bg-bhromani-light-gray flex items-center justify-center mb-4">
-                  <Users className="h-8 w-8 text-bhromani-purple" />
+                <div className="w-16 h-16 rounded-full bg-trailmesh-light-gray flex items-center justify-center mb-4">
+                  <Users className="h-8 w-8 text-trailmesh-blue" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Create a New Group</h3>
                 <p className="text-gray-600 text-sm text-center mb-4">
                   Start a group with your travel companions
                 </p>
-                <Button className="bg-bhromani-purple hover:bg-bhromani-purple-dark">
+                <Button className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark">
                   Create Group
                 </Button>
               </Card>
             </div>
           </TabsContent>
           
-          <TabsContent value="map">
-            <div className="bg-white p-6 rounded-xl shadow-sm">
-              <h2 className="text-xl font-bold mb-4">Your Travel Map</h2>
+          <TabsContent value="map" className="bg-white p-6 rounded-xl shadow-sm">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Your Travel Map</h2>
+            <div className="bg-trailmesh-light-blue bg-opacity-10 p-2 rounded-lg">
               <LocationMap />
             </div>
           </TabsContent>

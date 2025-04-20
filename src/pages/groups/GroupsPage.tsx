@@ -42,45 +42,32 @@ const GroupsPage = () => {
         const user = await getCurrentUser();
         
         if (!user) {
-          throw new Error("User not authenticated");
-        }
-
-        console.log("Fetching groups for user:", user.id);
-
-        // Get groups the user is a member of
-        const { data: memberGroups, error: memberError } = await supabase
-          .from("group_members")
-          .select("group_id")
-          .eq("user_id", user.id);
-
-        if (memberError) {
-          console.error("Error fetching member groups:", memberError);
-          throw memberError;
-        }
-
-        console.log("Member groups:", memberGroups);
-
-        if (!memberGroups || memberGroups.length === 0) {
-          console.log("No member groups found");
+          console.log("No user found, showing empty groups");
           setGroups([]);
           setIsLoading(false);
           return;
         }
 
-        const groupIds = memberGroups.map(member => member.group_id);
+        console.log("Fetching groups for user:", user.id);
 
-        // Get the group details
+        // Get all groups initially if user is new
         const { data: groupData, error: groupError } = await supabase
           .from("groups")
-          .select("*")
-          .in("id", groupIds);
+          .select("*");
 
         if (groupError) {
-          console.error("Error fetching group details:", groupError);
+          console.error("Error fetching groups:", groupError);
           throw groupError;
         }
 
         console.log("Group data:", groupData);
+        
+        if (!groupData || groupData.length === 0) {
+          console.log("No groups found");
+          setGroups([]);
+          setIsLoading(false);
+          return;
+        }
 
         // For each group, get member count and some sample members
         const enhancedGroups = await Promise.all(
@@ -100,14 +87,15 @@ const GroupsPage = () => {
               .eq("id", group.created_by)
               .single();
 
-            if (creatorError) console.error("Error fetching creator:", creatorError);
+            if (creatorError && creatorError.code !== 'PGRST116') {
+              console.error("Error fetching creator:", creatorError);
+            }
 
             // Get some members for preview
             const { data: membersData, error: membersError } = await supabase
               .from("group_members")
               .select("user_id")
               .eq("group_id", group.id)
-              .neq("user_id", group.created_by)
               .limit(5);
 
             if (membersError) console.error("Error fetching members:", membersError);
@@ -184,7 +172,7 @@ const GroupsPage = () => {
             <Button 
               onClick={handleCreateGroup}
               variant="royal"
-              className="mt-4 sm:mt-0"
+              className="mt-4 sm:mt-0 bg-trailmesh-blue hover:bg-trailmesh-blue-dark"
             >
               <Plus className="mr-2 h-4 w-4" /> Create Group
             </Button>
@@ -229,7 +217,7 @@ const GroupsPage = () => {
                   ? "No groups match your search criteria. Try with a different term."
                   : "You haven't joined any groups yet. Create one or join an existing group."}
               </p>
-              <Button onClick={handleCreateGroup} variant="royal">
+              <Button onClick={handleCreateGroup} variant="royal" className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark">
                 <Plus className="mr-2 h-4 w-4" /> Create Your First Group
               </Button>
             </div>

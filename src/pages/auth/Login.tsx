@@ -27,7 +27,7 @@ const Login = () => {
           
           <AuthForm />
           
-          <p className="text-xs text-center text-gray-500 mt-8">
+          <p className="text-sm text-center text-gray-600 mt-8">
             By using TrailMesh, you agree to our{" "}
             <a href="#" className="text-trailmesh-blue hover:underline">Terms of Service</a>
             {" "}and{" "}
@@ -36,7 +36,7 @@ const Login = () => {
         </div>
       </div>
       
-      <footer className="py-4 text-center text-sm text-gray-500">
+      <footer className="py-4 text-center text-sm text-gray-600">
         © {new Date().getFullYear()} TrailMesh. All rights reserved.
       </footer>
     </div>

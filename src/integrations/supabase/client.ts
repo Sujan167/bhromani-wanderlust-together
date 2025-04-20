@@ -16,13 +16,11 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
 
 // Export a function to get the redirect URL
 export const getAuthRedirectURL = () => {
-  // Updated to ensure we're using trailmesh consistently
-  const redirectTo = window.location.hostname === 'localhost' ? 
-    'http://localhost:8080' : 
-    'https://trailmesh.sujanb.com.np';
-    
-  // Include hash to ensure proper redirection
-  return `${redirectTo}/dashboard`;
+  // Use window.location.origin to get the current domain with protocol
+  const origin = window.location.origin;
+  
+  // Return the complete URL with the dashboard path
+  return `${origin}/dashboard`;
 };
 
 // Helper function to fetch user data that can be reused across components
