@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { supabase, getAuthRedirectURL, googleOAuthConfig } from '@/integrations/supabase/client';
@@ -118,6 +119,7 @@ const AuthForm = () => {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
+      // Use the correctly typed googleOAuthConfig
       const { data, error } = await supabase.auth.signInWithOAuth(googleOAuthConfig);
       
       if (error) throw error;
@@ -182,7 +184,7 @@ const AuthForm = () => {
             </CardContent>
             
             <CardFooter className="flex flex-col gap-4">
-              <Button type="submit" className="w-full bg-trailmesh-blue hover:bg-trailmesh-blue-dark" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-[#1e40af] hover:bg-[#1e3a8a] text-white" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
               
@@ -270,7 +272,7 @@ const AuthForm = () => {
             </CardContent>
             
             <CardFooter className="flex flex-col gap-4">
-              <Button type="submit" className="w-full bg-trailmesh-blue hover:bg-trailmesh-blue-dark" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-[#1e40af] hover:bg-[#1e3a8a] text-white" disabled={isLoading}>
                 {isLoading ? "Creating Account..." : "Create Account"}
               </Button>
               

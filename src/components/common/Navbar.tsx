@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, Bell, LogOut, User, Users, Calendar, Map } from "lucide-react";
+import { Menu, Bell, LogOut, User, Users, Map } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
@@ -22,6 +22,8 @@ interface UserData {
   email: string;
   avatar_url?: string | null;
 }
+
+const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=150&h=150";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -49,7 +51,7 @@ const Navbar = () => {
             id: session.user.id,
             name: profileData?.full_name || session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
             email: session.user.email || '',
-            avatar_url: profileData?.avatar_url || 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=150&h=150'
+            avatar_url: profileData?.avatar_url || DEFAULT_AVATAR
           });
         } else {
           setUserData(null);
@@ -73,7 +75,7 @@ const Navbar = () => {
           id: session.user.id,
           name: profileData?.full_name || session.user.user_metadata.full_name || session.user.email?.split('@')[0] || 'User',
           email: session.user.email || '',
-          avatar_url: profileData?.avatar_url || 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=150&h=150'
+          avatar_url: profileData?.avatar_url || DEFAULT_AVATAR
         });
       }
     });
@@ -91,7 +93,9 @@ const Navbar = () => {
   // Handle logout
   const handleLogout = async () => {
     try {
-      await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
       toast({
         title: "Logged out successfully",
         description: "You have been logged out from your account.",
@@ -99,9 +103,9 @@ const Navbar = () => {
       navigate('/');
     } catch (error: any) {
       toast({
+        variant: "destructive",
         title: "Error logging out",
         description: error.message || "Something went wrong",
-        variant: "destructive",
       });
     }
   };
@@ -116,7 +120,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <Link to="/" className="flex items-center">
-            <span className="text-xl font-bold text-trailmesh-blue">TrailMesh</span>
+            <span className="text-xl font-bold text-[#1e40af]">TrailMesh</span>
           </Link>
           
           {isLoggedIn && (
@@ -125,8 +129,8 @@ const Navbar = () => {
                 to="/trips" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/trips') 
-                    ? 'text-trailmesh-blue' 
-                    : 'text-gray-600 hover:text-trailmesh-blue'
+                    ? 'text-[#1e40af]' 
+                    : 'text-gray-600 hover:text-[#1e40af]'
                 }`}
               >
                 <Map size={18} /> Trips
@@ -135,8 +139,8 @@ const Navbar = () => {
                 to="/groups" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/groups') 
-                    ? 'text-trailmesh-blue' 
-                    : 'text-gray-600 hover:text-trailmesh-blue'
+                    ? 'text-[#1e40af]' 
+                    : 'text-gray-600 hover:text-[#1e40af]'
                 }`}
               >
                 <Users size={18} /> Groups
@@ -145,8 +149,8 @@ const Navbar = () => {
                 to="/discover" 
                 className={`flex items-center gap-1 text-sm font-medium ${
                   isActive('/discover') 
-                    ? 'text-trailmesh-blue' 
-                    : 'text-gray-600 hover:text-trailmesh-blue'
+                    ? 'text-[#1e40af]' 
+                    : 'text-gray-600 hover:text-[#1e40af]'
                 }`}
               >
                 <Map size={18} /> Discover
@@ -166,8 +170,8 @@ const Navbar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar className="h-9 w-9 cursor-pointer">
-                    <AvatarImage src={userData?.avatar_url || "/placeholder.svg"} alt={userData?.name || "User"} />
-                    <AvatarFallback className="bg-trailmesh-blue text-white">
+                    <AvatarImage src={userData?.avatar_url || DEFAULT_AVATAR} alt={userData?.name || "User"} />
+                    <AvatarFallback className="bg-[#1e40af] text-white">
                       {userData?.name?.substring(0, 2)?.toUpperCase() || "TM"}
                     </AvatarFallback>
                   </Avatar>
@@ -182,10 +186,6 @@ const Navbar = () => {
                   <DropdownMenuItem onClick={() => navigate('/places')}>
                     <Map className="mr-2 h-4 w-4" />
                     <span>My Places</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/history')}>
-                    <Calendar className="mr-2 h-4 w-4" />
-                    <span>Trip History</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout}>
@@ -207,12 +207,11 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Button variant="ghost" asChild className="text-trailmesh-blue hover:text-trailmesh-blue-dark">
+              <Button variant="ghost" asChild className="text-[#1e40af] hover:text-[#1e3a8a]">
                 <Link to="/login">Login</Link>
               </Button>
               <Button 
-                variant="royal" 
-                className="bg-trailmesh-blue hover:bg-trailmesh-blue-dark text-white" 
+                className="bg-[#1e40af] hover:bg-[#1e3a8a] text-white" 
                 onClick={handleLogin}
               >
                 Sign Up
@@ -230,7 +229,7 @@ const Navbar = () => {
               to="/trips" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/trips') 
-                  ? 'bg-trailmesh-blue/10 text-trailmesh-blue' 
+                  ? 'bg-[#1e40af]/10 text-[#1e40af]' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}
@@ -241,7 +240,7 @@ const Navbar = () => {
               to="/groups" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/groups') 
-                  ? 'bg-trailmesh-blue/10 text-trailmesh-blue' 
+                  ? 'bg-[#1e40af]/10 text-[#1e40af]' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}
@@ -252,7 +251,7 @@ const Navbar = () => {
               to="/discover" 
               className={`flex items-center gap-2 py-2 px-4 rounded-md ${
                 isActive('/discover') 
-                  ? 'bg-trailmesh-blue/10 text-trailmesh-blue' 
+                  ? 'bg-[#1e40af]/10 text-[#1e40af]' 
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
               onClick={() => setMobileMenuOpen(false)}

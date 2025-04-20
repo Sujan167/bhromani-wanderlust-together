@@ -37,16 +37,15 @@ export const getCurrentUser = async () => {
   }
 };
 
-// Google OAuth configuration with credentials
+// Google OAuth configuration with credentials (updated to use the correct type)
 export const googleOAuthConfig = {
-  provider: 'google',
+  provider: 'google' as const,
   options: {
     clientId: '88565335308-ti1urvnnn75i0fdh0gr2913cbaqpctm3.apps.googleusercontent.com',
-    clientSecret: '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',
+    redirectTo: getAuthRedirectURL(),
     queryParams: {
       access_type: 'offline',
       prompt: 'consent',
-    },
-    redirectTo: getAuthRedirectURL(),
+    }
   }
 };

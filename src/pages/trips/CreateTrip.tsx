@@ -32,7 +32,10 @@ const tripFormSchema = z.object({
   description: z.string().optional(),
   location: z.string().min(1, { message: "Location is required" }),
   startDate: z.date({ required_error: "Start date is required" }),
-  endDate: z.date({ required_error: "End date is required" }),
+  endDate: z.date({ required_error: "End date is required" })
+    .refine(date => date instanceof Date, {
+      message: "End date is required"
+    }),
   coverImage: z.string().optional(),
 });
 
@@ -49,9 +52,6 @@ const CreateTrip = () => {
       description: "",
       location: "",
       coverImage: "",
-      // Leave these undefined so user has to select them explicitly
-      startDate: undefined,
-      endDate: undefined,
     },
   });
 

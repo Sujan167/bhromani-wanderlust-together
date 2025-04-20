@@ -96,11 +96,36 @@
 }
 
 a.footer-link {
-  @apply text-trailmesh-blue hover:text-trailmesh-blue-dark font-medium;
+  @apply text-blue-600 hover:text-blue-800 font-medium;
 }
 
 .btn-signup {
-  @apply bg-trailmesh-blue text-white hover:bg-trailmesh-blue-dark;
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+/* Golden-Royal Blue color scheme */
+.royal-blue {
+  @apply text-[#1e40af];
+}
+
+.golden {
+  @apply text-amber-500;
+}
+
+.bg-royal-blue {
+  @apply bg-[#1e40af];
+}
+
+.bg-golden {
+  @apply bg-amber-500;
+}
+
+.btn-royal {
+  @apply bg-[#1e40af] text-white hover:bg-[#1e3a8a];
+}
+
+.btn-golden {
+  @apply bg-amber-500 text-white hover:bg-amber-600;
 }
 
 /* Enhanced footer styles for better visibility */
@@ -120,31 +145,31 @@ footer p {
 
 /* Enhanced button styles with royal blue */
 .btn-primary {
-  @apply bg-trailmesh-blue text-white hover:bg-trailmesh-blue-dark;
+  @apply bg-[#1e40af] text-white hover:bg-[#1e3a8a];
 }
 
 /* Enhancing map elements */
 .map-element {
-  @apply text-trailmesh-blue;
+  @apply text-[#1e40af];
 }
 
 /* Making the colors more vibrant and consistent */
 .text-trailmesh-blue {
-  @apply text-blue-600;
+  @apply text-[#1e40af];
 }
 
 .hover\:text-trailmesh-blue-dark:hover {
-  @apply text-blue-800;
+  @apply text-[#1e3a8a];
 }
 
 .bg-trailmesh-blue {
-  @apply bg-blue-600;
+  @apply bg-[#1e40af];
 }
 
 .hover\:bg-trailmesh-blue-dark:hover {
-  @apply bg-blue-800;
+  @apply bg-[#1e3a8a];
 }
 
 button[variant="royal"] {
-  @apply bg-blue-600 text-white hover:bg-blue-700;
+  @apply bg-[#1e40af] text-white hover:bg-[#1e3a8a];
 }
